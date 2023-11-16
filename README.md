@@ -6,3 +6,14 @@ Embedded System Design Project
 # Sources
 
  - [General Introduction](https://en.wikipedia.org/wiki/Digital_image_processing)
+
+ - [What is YUV?](https://www.pcmag.com/encyclopedia/term/yuv)
+
+ - [Conversion between YUV and RGB](https://www.pcmag.com/encyclopedia/term/yuvrgb-conversion-formulas)
+
+ - [Convert RGB to Grayscale](https://www.baeldung.com/cs/convert-rgb-to-grayscale)
+
+ - [Space Convolution Illustration](https://www.researchgate.net/figure/Schematic-illustration-of-a-convolutional-operation-The-convolutional-kernel-shifts-over_fig2_332190148)
+
+ - [Digital Image Processing 4th Edition by Rafael C. Gonzalez , Richard E. Woods](https://studylib.net/doc/25705174/digital-image-processing-4th-ed.---r.-gonzalez--r.-woods-...)
+
