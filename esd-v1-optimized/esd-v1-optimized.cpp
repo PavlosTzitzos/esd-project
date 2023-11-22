@@ -36,18 +36,18 @@ int frame_gs_y[N][M];   /* Frame Y of converted grayscale yuv image */
 int frame_gs_u[N][M];   /* Frame U of converted grayscale yuv image */
 int frame_gs_v[N][M];   /* Frame V of converted grayscale yuv image */
 
-int frame_padded[N+2][M+2]; /* Frame (I) used to apply the filters */
+int frame_padded[N + 2][M + 2]; /* Frame (I) used to apply the filters */
 
 int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };  /* Gaussian 3x3 mask */
-int kernel_sobel_x[3][3]  = { {-1,0,1},   {-2,0,2}, {-1,0,1} }; /* Sobel 3x3 mask for Ix=DxI */
-int kernel_sobel_y[3][3]  = { {-1,-2,-1}, {0,0,0},  {1,2,1} };  /* Sobel 3x3 mask for Iy=DyI */
+int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} }; /* Sobel 3x3 mask for Ix=DxI */
+int kernel_sobel_y[3][3] = { {-1,-2,-1}, {0,0,0},  {1,2,1} };  /* Sobel 3x3 mask for Iy=DyI */
 
-int frame_filtered_y[N+2][M+2]; /* Frame Y after appling the gaussian filter */
+int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter */
 
-int frame_sobel_x[N+2][M+2]; /* Frame of image after appling the sobel filter x */
-int frame_sobel_y[N+2][M+2]; /* Frame of image after appling the sobel filter y */
+int frame_sobel_x[N + 2][M + 2]; /* Frame of image after appling the sobel filter x */
+int frame_sobel_y[N + 2][M + 2]; /* Frame of image after appling the sobel filter y */
 
-int frame_gradient[2*(N+2)][2*(M+2)];
+int frame_gradient[2 * (N + 2)][2 * (M + 2)];
 
 int frame_angle[N][M];
 int frame_magnitude[N][M];
@@ -94,7 +94,7 @@ int max2(int a, int b)
     else if (a < b)
         return b;
     else
-        return -1;
+        return 0;
 }
 
 /// <summary>
@@ -113,7 +113,7 @@ int min3(int a, int b, int c)
     else if (c == min2(a, c) && -1 == min2(a, b))
         return c;
     else
-        return -1;
+        return 0;
 }
 
 /// <summary>
@@ -145,31 +145,34 @@ void read_image()
     if ((frame_c = fopen(filename, "rb")) == NULL)
     {
         printf("current frame doesn't exist\n");
-        exit(-1);
+        //exit(-1);
+        
     }
+    else {
 
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
+        for (i = 0;i < N;i++)
         {
-            frame_y[i][j] = fgetc(frame_c);
+            for (j = 0;j < M;j++)
+            {
+                frame_y[i][j] = fgetc(frame_c);
+            }
         }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
+        for (i = 0;i < N;i++)
         {
-            frame_u[i][j] = fgetc(frame_c);
+            for (j = 0;j < M;j++)
+            {
+                frame_u[i][j] = fgetc(frame_c);
+            }
         }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
+        for (i = 0;i < N;i++)
         {
-            frame_v[i][j] = fgetc(frame_c);
+            for (j = 0;j < M;j++)
+            {
+                frame_v[i][j] = fgetc(frame_c);
+            }
         }
+        fclose(frame_c);
     }
-    fclose(frame_c);
 }
 
 /// <summary>
@@ -258,9 +261,9 @@ void write_grayscale_image()
     FILE* frame_grayscale;
     frame_grayscale = fopen(file_grayscale, "wb");
 
-    for (i = 0;i < N+2;i++)
+    for (i = 0;i < N;i++)
     {
-        for (j = 0;j < M+2;j++)
+        for (j = 0;j < M;j++)
         {
             fputc(frame_gs_y[i][j], frame_grayscale);
         }
@@ -294,9 +297,9 @@ void write_gaussian_image()
     FILE* frame_gaussian;
     frame_gaussian = fopen(file_gaussian_f, "wb");
 
-    for (i = 0;i < N+2;i++)
+    for (i = 0;i < N + 2;i++)
     {
-        for (j = 0;j < M+2;j++)
+        for (j = 0;j < M + 2;j++)
         {
             fputc(frame_filtered_y[i][j], frame_gaussian);
         }
@@ -414,9 +417,21 @@ void yuv_to_rgb() {
     {
         for (j = 0;j < M;j++)
         {
-            frame_r[i][j] = frame_y[i][j] + 1.140 * frame_v[i][j];
-            frame_g[i][j] = frame_y[i][j] - 0.395 * frame_u[i][j] - 0.581 * frame_v[i][j];
-            frame_b[i][j] = frame_y[i][j] + 2.032 * frame_u[i][j];
+            frame_r[i][j] = (int)round(frame_y[i][j] + 1.140 * frame_v[i][j]);
+        }
+    }
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0;j < M;j++)
+        {
+            frame_g[i][j] = (int)round(frame_y[i][j] - 0.395 * frame_u[i][j] - 0.581 * frame_v[i][j]);
+        }
+    }
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0;j < M;j++)
+        {
+            frame_b[i][j] = (int)round(frame_y[i][j] + 2.032 * frame_u[i][j]);
         }
     }
 }
@@ -435,9 +450,21 @@ void rgb_gs_to_yuv() {
     {
         for (j = 0;j < M;j++)
         {
-            frame_gs_y[i][j] =  0.299*frame_gs_rgb[i][j] + 0.587 * frame_gs_rgb[i][j] + 0.114 * frame_gs_rgb[i][j];
-            frame_gs_u[i][j] = -0.147*frame_gs_rgb[i][j] - 0.289 * frame_gs_rgb[i][j] + 0.436 * frame_gs_rgb[i][j];
-            frame_gs_v[i][j] =  0.615*frame_gs_rgb[i][j] - 0.515 * frame_gs_rgb[i][j] - 0.100 * frame_gs_rgb[i][j];
+            frame_gs_y[i][j] = (int)round(0.299 * frame_gs_rgb[i][j] + 0.587 * frame_gs_rgb[i][j] + 0.114 * frame_gs_rgb[i][j]);
+        }
+    }
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0;j < M;j++)
+        {
+            frame_gs_u[i][j] = (int)round( - 0.147 * frame_gs_rgb[i][j] - 0.289 * frame_gs_rgb[i][j] + 0.436 * frame_gs_rgb[i][j]);
+        }
+    }
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0;j < M;j++)
+        {
+            frame_gs_v[i][j] = (int)round(0.615 * frame_gs_rgb[i][j] - 0.515 * frame_gs_rgb[i][j] - 0.100 * frame_gs_rgb[i][j]);
         }
     }
 }
@@ -456,9 +483,21 @@ void rgb_to_yuv() {
     {
         for (j = 0;j < M;j++)
         {
-            frame_coloured_y[i][j] =  0.299 * frame_coloured_r[i][j] + 0.587 * frame_coloured_g[i][j] + 0.114 * frame_coloured_b[i][j];
-            frame_coloured_u[i][j] = -0.147 * frame_coloured_r[i][j] - 0.289 * frame_coloured_g[i][j] + 0.436 * frame_coloured_b[i][j];
-            frame_coloured_v[i][j] =  0.615 * frame_coloured_r[i][j] - 0.515 * frame_coloured_g[i][j] - 0.100 * frame_coloured_b[i][j];
+            frame_coloured_y[i][j] = (int)round(0.299 * frame_coloured_r[i][j] + 0.587 * frame_coloured_g[i][j] + 0.114 * frame_coloured_b[i][j]);
+        }
+    }
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0;j < M;j++)
+        {
+            frame_coloured_u[i][j] = (int)round( - 0.147 * frame_coloured_r[i][j] - 0.289 * frame_coloured_g[i][j] + 0.436 * frame_coloured_b[i][j]);
+        }
+    }
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0;j < M;j++)
+        {
+            frame_coloured_v[i][j] = (int)round(0.615 * frame_coloured_r[i][j] - 0.515 * frame_coloured_g[i][j] - 0.100 * frame_coloured_b[i][j]);
         }
     }
 }
@@ -473,7 +512,7 @@ void grayscale_lightness()
     {
         for (j = 0;j < M;j++)
         {
-            frame_gs_rgb[i][j] = 0.5 * ( min3(frame_r[i][j], frame_g[i][j], frame_b[i][j]) - max3(frame_r[i][j], frame_g[i][j], frame_b[i][j]) );
+            frame_gs_rgb[i][j] = (int)round(0.5 * (min3(frame_r[i][j], frame_g[i][j], frame_b[i][j]) - max3(frame_r[i][j], frame_g[i][j], frame_b[i][j])));
         }
     }
 }
@@ -489,10 +528,10 @@ void grayscale_avg()
     {
         for (j = 0;j < M;j++)
         {
-            frame_gs_rgb[i][j] = (frame_r[i][j] + frame_g[i][j] + frame_b[i][j])/3;
+            frame_gs_rgb[i][j] = (frame_r[i][j] + frame_g[i][j] + frame_b[i][j]) / 3;
         }
     }
-    
+
 }
 
 /// <summary>
@@ -505,7 +544,7 @@ void grayscale_luminosity()
     {
         for (j = 0;j < M;j++)
         {
-            frame_gs_rgb[i][j] = 0.3*frame_r[i][j] + 0.59*frame_g[i][j] + 0.11*frame_b[i][j];
+            frame_gs_rgb[i][j] = (int)round(0.3 * frame_r[i][j] + 0.59 * frame_g[i][j] + 0.11 * frame_b[i][j]);
         }
     }
 }
@@ -515,8 +554,6 @@ void grayscale_luminosity()
 /// </summary>
 /// <param name="sel">Select method</param>
 void rgb_to_grayscale(int sel) {
-	//
-    int i, j;
 
     switch (sel)
     {
@@ -542,9 +579,9 @@ void padder()
 {
     int i, j;
 
-    for (i = 0;i < 2+2;i++)
+    for (i = 0;i < 2 + 2;i++)
     {
-        for (j = 0;j < 2+2;j++)
+        for (j = 0;j < 2 + 2;j++)
         {
             if (i == 0 || j == 0 || i == N + 2 || j == M + 2)
             {
@@ -552,7 +589,7 @@ void padder()
             }
             else
             {
-                frame_padded[i][j] = frame_gs_y[i-1][j-1];
+                frame_padded[i][j] = frame_gs_y[i - 1][j - 1];
             }
         }
     }
@@ -675,11 +712,11 @@ void gradient_calc()
     // Step 1 : Apply the sobel filters
     sobel_filter_x();
     sobel_filter_y();
-    
+
     // Step 2 : Calculate the gradient
-    for (int i = 0;i < (N + 2)*2;i++)
+    for (int i = 0;i < (N + 2) * 2;i++)
     {
-        for (int j = 0;j < (M + 2)*2;j++)
+        for (int j = 0;j < (M + 2) * 2;j++)
         {
             if (i < N + 2 && j < M + 2)
             {
@@ -687,7 +724,7 @@ void gradient_calc()
             }
             else if (i >= N + 2 && j > M + 2)
             {
-                frame_gradient[i][j] = frame_sobel_y[N-i][M-j];
+                frame_gradient[i][j] = frame_sobel_y[N - i][M - j];
             }
         }
     }
@@ -704,10 +741,10 @@ void angle_calc()
         for (int j = 0;j < M;j++)
         {
             // handling division by 0 
-            if(frame_sobel_y[i][j] == 0)
-                frame_angle[i][j] = atan(frame_sobel_x[i][j] / 0.01) * 180 / PI;
+            if (frame_sobel_y[i][j] == 0)
+                frame_angle[i][j] = (int)round(atan(frame_sobel_x[i][j] / 0.01) * 180 / PI);
             else
-                frame_angle[i][j] = atan(frame_sobel_x[i][j] / frame_sobel_y[i][j]) * 180 / PI;
+                frame_angle[i][j] = (int)round(atan(frame_sobel_x[i][j] / frame_sobel_y[i][j]) * 180 / PI);
         }
     }
 }
@@ -721,7 +758,7 @@ void magnitude_calc()
     {
         for (int j = 0;j < M;j++)
         {
-            frame_magnitude[i][j] = sqrt(pow(frame_sobel_x[i][j],2) + pow(frame_sobel_y[i][j],2));
+            frame_magnitude[i][j] = (int)round(sqrt(pow(frame_sobel_x[i][j], 2) + pow(frame_sobel_y[i][j], 2)));
         }
     }
 }
@@ -753,7 +790,7 @@ int find_max()
 /// <returns></returns>
 int find_min()
 {
-    int min = 0;
+    int min = 50;
     for (int i = 0;i < N;i++)
     {
         for (int j = 0;j < M;j++)
@@ -772,24 +809,27 @@ int find_min()
 /// </summary>
 /// <param name="min"></param>
 /// <param name="max"></param>
-void linear_scaling(int min , int max)
+void linear_scaling(int min, int max)
 {
-    int i, j;
-    float slope = 255 / (max - min);
-
-    for (i = 0;i < N;i++)
+    if (max != 0)
     {
-        for (j = 0; j < M;j++)
+        int i, j;
+        int slope = 255 / (max - min);
+
+        for (i = 0;i < N;i++)
         {
-            // for all elments of magnitude image do this :
-            frame_scaled[i][j] = (int)round(slope * (frame_magnitude[i][j] - min));
-            // this is actually a straight line :
-            // y = a*(x-x0) + y0 
-            // where (x0,y0) = (min,0) , a = slope
-            // and slope = (y1 - y0) / (x1 - x0) = (255 - 0) / (max - min)
-            //
-            // additionally round the result before saving it because we accept only integers
-            // then cast it to int
+            for (j = 0; j < M;j++)
+            {
+                // for all elments of magnitude image do this :
+                frame_scaled[i][j] = slope * (frame_magnitude[i][j] - min);
+                // this is actually a straight line :
+                // y = a*(x-x0) + y0 
+                // where (x0,y0) = (min,0) , a = slope
+                // and slope = (y1 - y0) / (x1 - x0) = (255 - 0) / (max - min)
+                //
+                // additionally round the result before saving it because we accept only integers
+                // then cast it to int
+            }
         }
     }
 }
@@ -804,25 +844,25 @@ void scale_magnitude_image()
     // Step 2 : find the maximum magnitude
     int max_magnitude = find_max();
     // Step 3 : linear scaling
-    linear_scaling(min_magnitude,max_magnitude);
+    linear_scaling(min_magnitude, max_magnitude);
 }
 
 void colour_image_v1()
 {
     int i, j;
-
+    
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            frame_coloured_r[i][j] = frame_magnitude[i][j] * sin(frame_angle[i][j]);
+            frame_coloured_r[i][j] = (int)round(frame_magnitude[i][j] * sin(frame_angle[i][j]));
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            frame_coloured_g[i][j] = frame_magnitude[i][j] * cos(frame_angle[i][j]);
+            frame_coloured_g[i][j] = (int)round(frame_magnitude[i][j] * cos(frame_angle[i][j]));
         }
     }
     for (i = 0;i < N;i++)
@@ -871,48 +911,47 @@ void colour_image_v2()
     }
 }
 
+
 int main()
 {
-	// Step 1: Load Image as YUV type from memory
-	read_image();
+    // Step 1: Load Image as YUV type from memory
+    read_image();
 
-    write_yuv_image(); // test if the YUV image is loaded correctly
-	
-	// Step 2: Convert YUV image to RGB
-	yuv_to_rgb();
+    // write_yuv_image(); // test if the YUV image is loaded correctly
 
-    write_rgb_image(); // test if the RGB image is converted correctly
+    // Step 2: Convert YUV image to RGB
+    yuv_to_rgb();
 
-	// Step 3: Convert RGB to Grayscale
-	rgb_to_grayscale(2);
-    rgb_gs_to_yuv();
-    write_grayscale_image(); // test if the grayscale image is converted correctly
+    // write_rgb_image(); // test if the RGB image is converted correctly
 
-	// Step 4: Apply the Gaussian filter on the Image
-	gaussian_filter();
-    write_gaussian_image();
+    // Step 3: Convert RGB to Grayscale
+    rgb_to_grayscale(2);
+    // rgb_gs_to_yuv();
+    // write_grayscale_image(); // test if the grayscale image is converted correctly
 
-	// Step 5: Calculate the angle and the magnitude og the image
+    // Step 4: Apply the Gaussian filter on the Image
+    gaussian_filter();
+    // write_gaussian_image();
+
+    // Step 5: Calculate the angle and the magnitude og the image
     gradient_calc();
-    write_gradient_image();
+    // write_gradient_image();
 
     angle_calc();
-    write_angle_image();
+    // write_angle_image();
 
     magnitude_calc();
-    write_magnitude_image();
+    // write_magnitude_image();
 
     // Step 6: Scale the magnitude image
     scale_magnitude_image();
-	
+
     // Step 7: Colour the image
-	colour_image_v2();
+    colour_image_v2();
     rgb_to_yuv();
     write_colored_image();
 
-	// Step 8: Test
-
-	return 0;
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
