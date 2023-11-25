@@ -585,16 +585,17 @@ void padder()
 /// </summary>
 void gaussian_filter() {
     int i, j, k, s;
-    // Step 1 : make a padding image
-    padder();
+
+    //tex:
+    //Convolution: $\begin{align*} I_{grayscale,filtered} = ( G_{kernel} \bigstar I_{grayscale} )(x,y) = \sum _{i=0} ^{N-1} \sum _{j=0} ^{M-1} G_{kernel}(x-i,y-j) I_{grayscale}(i,j)  \end{align*}$
+    
+    // Step 1 : make a padded copy of the image
     // Step 2 : for all elements of the image
     // Step 3 : for all the neighborhood
     // Step 4 : multiply and then sum the results
     // Step 5 : put the result into the i,j element
 
-    //tex:
-    //Convolution: $\begin{align*} I_{grayscale,filtered} = ( G_{kernel} \bigstar I_{grayscale} )(x,y) = \sum _{i=0} ^{N-1} \sum _{j=0} ^{M-1} G_{kernel}(x-i,y-j) I_{grayscale}(i,j)  \end{align*}$
-    
+    padder();
     for (i = 1;i < N;i++)
     {
         for (j = 1;j < M;j++)
@@ -604,7 +605,8 @@ void gaussian_filter() {
             int sum = 0;
 
             //tex:
-            //$\begin{align*} I_{neighborhood} = \sum _{i=-1} ^{1} \left( \sum _{j=-1} ^1 I_{padded}(i,j) \right) \end{align*}$
+            //$\begin{align*} I_{neighborhood} = \sum _{i=-1} ^{1} \left( \sum _{j=-1} ^1 I_{padded}(i,j) \right) = \begin{bmatrix} I_{padded}(i-1,j-1) & I_{padded}(i-1,j) & I_{padded}(i-1,j+1) \\ I_{padded}(i,j-1) & I_{padded}(i,j) & I_{padded}(i,j+1) \\ I_{padded}(i+1,j-1) & I_{padded}(i+1,j) & I_{padded}(i+1,j+1) \end{bmatrix} \end{align*}$
+            
             
             int neighbohood_of_image[3][3] = {
                 {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
@@ -613,7 +615,8 @@ void gaussian_filter() {
             };
 
             //tex:
-            //$\begin{align*} I_{y , filtered} = \sum _{k=0} ^{3} \left( \sum _{s=0} ^3 G_{kernel}(k,s) \cdot I_{neighborhood}(k,s) \right) \end{align*}$
+            //$\begin{align*} I_{grayscale , filtered} = \sum _{k=0} ^{3} \left( \sum _{s=0} ^3 G_{kernel}(k,s) \cdot I_{neighborhood}(k,s) \right) \end{align*}$
+            
             
             for (k = 0;k < 3;k++)
             {
@@ -634,10 +637,15 @@ void gaussian_filter() {
 void sobel_filter_x()
 {
     int i, j, k, s;
-    // Step 2 : for all elements of the image
-    // Step 3 : for all the neighborhood
-    // Step 4 : multiply and then sum the results
-    // Step 5 : put the result into the i,j element
+
+    //tex:
+    //Convolution: $\begin{align*} I_{x,filtered} = ( S_{x,kernel} \bigstar I_{grayscale,filtered} )(x,y) = \sum _{i=0} ^{N-1} \sum _{j=0} ^{M-1} S_{x,kernel}(x-i,y-j) I_{grayscale,filtered}(i,j)  \end{align*}$
+    
+    
+    // Step 1 : for all elements of the image
+    // Step 2 : for all the neighborhood
+    // Step 3 : multiply and then sum the results
+    // Step 4 : put the result into the i,j element
     for (i = 1;i < N;i++)
     {
         for (j = 1;j < M;j++)
@@ -645,12 +653,20 @@ void sobel_filter_x()
             // element of padded image is : padded_image[i][j]
             // element of the initial image is : grayscale_image_y[i-1][j-1]
             int sum = 0;
+
+            //tex:
+            //$\begin{align*} I_{neighborhood} = \sum _{i=-1} ^{1} \left( \sum _{j=-1} ^1 I_{grayscale,filtered}(i,j) \right) \end{align*}$
+
+            
             int neighbohood_of_image[3][3] = {
                 {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
                 {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
                 {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
             };
 
+            //tex:
+            //$\begin{align*} I_{x , filtered} = \sum _{k=0} ^{3} \left( \sum _{s=0} ^3 S_{x,kernel}(k,s) \cdot I_{neighborhood}(k,s) \right) \end{align*}$
+            
             for (k = 0;k < 3;k++)
             {
                 for (s = 0; s < 3;s++)
@@ -670,10 +686,15 @@ void sobel_filter_x()
 void sobel_filter_y()
 {
     int i, j, k, s;
-    // Step 2 : for all elements of the image
-    // Step 3 : for all the neighborhood
-    // Step 4 : multiply and then sum the results
-    // Step 5 : put the result into the i,j element
+    
+    //tex:
+    //Convolution: $\begin{align*} I_{y,filtered} = ( S_{y,kernel} \bigstar I_{grayscale,filtered} )(x,y) = \sum _{i=0} ^{N-1} \sum _{j=0} ^{M-1} S_{y,kernel}(x-i,y-j) I_{grayscale,filtered}(i,j)  \end{align*}$
+    
+    
+    // Step 1 : for all elements of the image
+    // Step 2 : for all the neighborhood
+    // Step 3 : multiply and then sum the results
+    // Step 4 : put the result into the i,j element
     for (i = 1;i < N;i++)
     {
         for (j = 1;j < M;j++)
@@ -681,12 +702,21 @@ void sobel_filter_y()
             // element of padded image is : padded_image[i][j]
             // element of the initial image is : grayscale_image_y[i-1][j-1]
             int sum = 0;
+
+            //tex:
+            //$\begin{align*} I_{neighborhood} = \sum _{i=-1} ^{1} \left( \sum _{j=-1} ^1 I_{grayscale,filtered}(i,j) \right) \end{align*}$
+
+            
             int neighbohood_of_image[3][3] = {
                 {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
                 {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
                 {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
             };
 
+            //tex:
+            //$\begin{align*} I_{y , filtered} = \sum _{k=0} ^{3} \left( \sum _{s=0} ^3 S_{y,kernel}(k,s) \cdot I_{neighborhood}(k,s) \right) \end{align*}$
+
+            
             for (k = 0;k < 3;k++)
             {
                 for (s = 0; s < 3;s++)
@@ -706,10 +736,18 @@ void sobel_filter_y()
 void gradient_calc()
 {
     // Step 1 : Apply the sobel filters
+    //tex:
+    //$\begin{align*} I_x = \frac{\partial I}{\partial x} \end{align*}$
+    // ,
+    //$\begin{align*} I_y = \frac{\partial I}{\partial y} \end{align*}$
+
     sobel_filter_x();
     sobel_filter_y();
     
     // Step 2 : Calculate the gradient
+    //tex:
+    //$\begin{align*} \nabla I = \begin{bmatrix} I_x & I_y \end{bmatrix}' \end{align*}$
+
     for (int i = 0;i < (N + 2)*2;i++)
     {
         for (int j = 0;j < (M + 2)*2;j++)
@@ -732,6 +770,9 @@ void gradient_calc()
 /// </summary>
 void angle_calc()
 {
+    //tex:
+    //$\begin{align*} \theta = \arctan{ \left( \frac{I_x}{I_y} \right) } \end{align*}$
+    
     for (int i = 0;i < N;i++)
     {
         for (int j = 0;j < M;j++)
@@ -750,6 +791,9 @@ void angle_calc()
 /// </summary>
 void magnitude_calc()
 {
+    //tex:
+    //$\begin{align*} | \nabla I | = \sqrt{{I_x} ^2 + {I_y} ^2} \end{align*}$
+    
     for (int i = 0;i < N;i++)
     {
         for (int j = 0;j < M;j++)
@@ -808,6 +852,10 @@ int find_min()
 void linear_scaling(int min , int max)
 {
     int i, j;
+
+    //tex:
+    //$\begin{align*} y = a (x - x_0) + y_0 \end{align*}$
+    
     float slope = 255 / (max - min);
 
     for (i = 0;i < N;i++)
@@ -844,6 +892,9 @@ void colour_image_v1()
 {
     int i, j;
 
+    //tex:
+    //$\begin{align*} R = | \nabla I | \sin{ \theta } \end{align*}$
+
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
@@ -851,6 +902,9 @@ void colour_image_v1()
             frame_coloured_r[i][j] = frame_magnitude[i][j] * sin(frame_angle[i][j]);
         }
     }
+    //tex:
+    //$\begin{align*} G = | \nabla I | \cos{ \theta } \end{align*}$
+
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
@@ -858,6 +912,9 @@ void colour_image_v1()
             frame_coloured_g[i][j] = frame_magnitude[i][j] * cos(frame_angle[i][j]);
         }
     }
+    //tex:
+    //$\begin{align*} B = 0 \end{align*}$
+
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
