@@ -39,8 +39,16 @@ int frame_gs_v[N][M];   /* Frame V of converted grayscale yuv image */
 int frame_padded[N+2][M+2]; /* Frame (I) used to apply the filters */
 
 int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };  /* Gaussian 3x3 mask */
+//tex:
+//$\begin{align*} G_{kernel} = \begin{bmatrix} 1 & 2 & 1 \\ 2 & 4 & 2 \\ 1 & 2 & 1 \end{bmatrix} \end{align*}$
+
 int kernel_sobel_x[3][3]  = { {-1,0,1},   {-2,0,2}, {-1,0,1} }; /* Sobel 3x3 mask for Ix=DxI */
+//tex:
+//$\begin{align*} S_{kernel, x} = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix} \end{align*}$
+
 int kernel_sobel_y[3][3]  = { {-1,-2,-1}, {0,0,0},  {1,2,1} };  /* Sobel 3x3 mask for Iy=DyI */
+//tex:
+//$\begin{align*} S_{kernel, y} = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix} \end{align*}$
 
 int frame_filtered_y[N+2][M+2]; /* Frame Y after appling the gaussian filter */
 
@@ -147,29 +155,30 @@ void read_image()
         printf("current frame doesn't exist\n");
         exit(-1);
     }
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
+    else {
+        for (i = 0;i < N;i++)
         {
-            frame_y[i][j] = fgetc(frame_c);
+            for (j = 0;j < M;j++)
+            {
+                frame_y[i][j] = fgetc(frame_c);
+            }
         }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
+        for (i = 0;i < N;i++)
         {
-            frame_u[i][j] = fgetc(frame_c);
+            for (j = 0;j < M;j++)
+            {
+                frame_u[i][j] = fgetc(frame_c);
+            }
         }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
+        for (i = 0;i < N;i++)
         {
-            frame_v[i][j] = fgetc(frame_c);
+            for (j = 0;j < M;j++)
+            {
+                frame_v[i][j] = fgetc(frame_c);
+            }
         }
+        fclose(frame_c);
     }
-    fclose(frame_c);
 }
 
 /// <summary>
@@ -400,14 +409,13 @@ void write_colored_image()
 
 /// <summary>
 /// This function converters an image from Y'UV to RGB.
-/// <para>Y is luminance and Y' is luma</para>
-/// <para>R = Y' + 1.13983 V </para>
-/// <para>G = Y' - 0.39465 U - 0.58060 V </para>
-/// <para>B = Y' + 2.03211 U </para>
 /// <para>For more info check the following link:</para>
 /// <see cref="https://answers.opencv.org/question/57188/how-to-calculate-the-yuv-values-of-a-grayscale-image/"/>
 /// </summary>
 void yuv_to_rgb() {
+    //tex:
+    //$\begin{align*} \begin{bmatrix} R \\ G \\ B \end{bmatrix} = \begin{bmatrix} 1 & 0 & 1.13983 \\ 1 & -0.39465 & -0.58060 \\ 1 & 2.03211 & 0 \end{bmatrix} \cdot \begin{bmatrix} Y \\ U \\ V \end{bmatrix} \end{align*}$
+    
     int i, j;
 
     for (i = 0;i < N;i++)
@@ -424,11 +432,11 @@ void yuv_to_rgb() {
 /// <summary>
 /// This function converters an image from RGB grayscale to Y'UV.
 /// <para>Y is luminance and Y' is luma</para>
-/// <para>Y' = 0.299 R + 0.587 G + 0.114 B </para>
-/// <para>U = -0.14713 R - 0.28886 G + 0.436 B </para>
-/// <para>V = 0.615 R + -0.51499 G - 0.10001 B </para>
 /// </summary>
 void rgb_gs_to_yuv() {
+    //tex:
+    //$\begin{align*} \begin{bmatrix} Y' \\ U \\ V \end{bmatrix} = \begin{bmatrix} 0.299 & 0.587 & 0.114 \\ -0.14713 & -0.28886 & 0.436 \\ 0.615 & -0.51499 & -0.10001 \end{bmatrix} \cdot \begin{bmatrix} R \\ G \\ B \end{bmatrix} \end{align*}$
+
     int i, j;
 
     for (i = 0;i < N;i++)
@@ -450,6 +458,9 @@ void rgb_gs_to_yuv() {
 /// <para>V = 0.615 R + -0.51499 G - 0.10001 B </para>
 /// </summary>
 void rgb_to_yuv() {
+    //tex:
+    //$\begin{align*} \begin{bmatrix} Y' \\ U \\ V \end{bmatrix} = \begin{bmatrix} 0.299 & 0.587 & 0.114 \\ -0.14713 & -0.28886 & 0.436 \\ 0.615 & -0.51499 & -0.10001 \end{bmatrix} \cdot \begin{bmatrix} R \\ G \\ B \end{bmatrix} \end{align*}$
+    
     int i, j;
 
     for (i = 0;i < N;i++)
@@ -468,6 +479,9 @@ void rgb_to_yuv() {
 /// </summary>
 void grayscale_lightness()
 {
+    //tex:
+    //$\begin{align*} I_{grayscale} = \frac{min(R,G,B) - max(R,G,B)}{2}\end{align*}$
+
     int i, j;
     for (i = 0;i < N;i++)
     {
@@ -484,6 +498,9 @@ void grayscale_lightness()
 /// </summary>
 void grayscale_avg()
 {
+    //tex:
+    //$\begin{align*} I_{grayscale} = \frac{R + G + B}{3} \end{align*}$
+
     int i, j;
     for (i = 0;i < N;i++)
     {
@@ -500,6 +517,8 @@ void grayscale_avg()
 /// </summary>
 void grayscale_luminosity()
 {
+    //tex:
+    //$\begin{align*} I_{grayscale} = 0.3 R + 0.59 G + 0.11 B\end{align*}$
     int i, j;
     for (i = 0;i < N;i++)
     {
@@ -542,11 +561,14 @@ void padder()
 {
     int i, j;
 
-    for (i = 0;i < 2+2;i++)
+    //tex:
+    //$\begin{align*} I_{y , padded} = \begin{bmatrix} 0 & \cdots & 0 \\ \vdots & I_{y,grayscale} & \vdots \\ 0 & \cdots & 0 \end{bmatrix} \end{align*}$
+    
+    for (i = 0;i < N+2;i++)
     {
-        for (j = 0;j < 2+2;j++)
+        for (j = 0;j < M+2;j++)
         {
-            if (i == 0 || j == 0 || i == N + 2 || j == M + 2)
+            if (i == 0 || j == 0 || i == N + 1 || j == M + 1)
             {
                 frame_padded[i][j] = 0;
             }
@@ -569,6 +591,10 @@ void gaussian_filter() {
     // Step 3 : for all the neighborhood
     // Step 4 : multiply and then sum the results
     // Step 5 : put the result into the i,j element
+
+    //tex:
+    //Convolution: $\begin{align*} I_{grayscale,filtered} = ( G_{kernel} \bigstar I_{grayscale} )(x,y) = \sum _{i=0} ^{N-1} \sum _{j=0} ^{M-1} G_{kernel}(x-i,y-j) I_{grayscale}(i,j)  \end{align*}$
+    
     for (i = 1;i < N;i++)
     {
         for (j = 1;j < M;j++)
@@ -576,12 +602,19 @@ void gaussian_filter() {
             // element of padded image is : frame_padded[i][j]
             // element of the initial image is : grayscale_image_y[i-1][j-1]
             int sum = 0;
+
+            //tex:
+            //$\begin{align*} I_{neighborhood} = \sum _{i=-1} ^{1} \left( \sum _{j=-1} ^1 I_{padded}(i,j) \right) \end{align*}$
+            
             int neighbohood_of_image[3][3] = {
                 {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
                 {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
                 {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
             };
 
+            //tex:
+            //$\begin{align*} I_{y , filtered} = \sum _{k=0} ^{3} \left( \sum _{s=0} ^3 G_{kernel}(k,s) \cdot I_{neighborhood}(k,s) \right) \end{align*}$
+            
             for (k = 0;k < 3;k++)
             {
                 for (s = 0; s < 3;s++)

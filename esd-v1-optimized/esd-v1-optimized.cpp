@@ -12,18 +12,14 @@
 #define M 496                                           /* Frame dimension for QCIF format */
 
 #define filename "cherry_496x372.yuv"                   /* The starting image */
-#define file_yuv "cherry_yuv_readed.yuv"                /* Testing loaded image */
-#define file_rgb "cherry_rgb_converted.yuv"             /* RGB image */
-#define file_grayscale "cherry_grayscale_converted.yuv" /* Grayscale image */
-#define file_gaussian_f "cherry_gaussian.yuv"           /* Image after appling the gaussian filter */
-#define file_gradient "cherry_gradient.yuv"             /* Gradient Image */
-#define file_angle "cherry_angle.yuv"                   /* Angle Image */
-#define file_magnitude "cherry_magnitude.yuv"           /* Magnitude Image */
 #define file_colored "cherry_colored.yuv"               /* Image after final colouring */
 
 #define PI 3.14159265                                   /* Pi number */
 
-int test_array[3][3] = { {0,1,2},{1,2,3},{2,3,0} }; // this is for tests only
+// double frame_optimized_1[N + 2][M + 2];
+// double frame_optimized_2[N + 2][M + 2];
+// double frame_optimized_3[N + 2][M + 2];
+
 
 int frame_y[N][M];      /* Frame Y of original yuv image */
 int frame_u[N][M];      /* Frame U of original yuv image */
@@ -71,7 +67,7 @@ int frame_coloured_v[N][M];
 /// <param name="a"></param>
 /// <param name="b"></param>
 /// <returns></returns>
-int min2(int a, int b)
+inline int min2(int a, int b)
 {
     if (a > b)
         return b;
@@ -87,7 +83,7 @@ int min2(int a, int b)
 /// <param name="a"></param>
 /// <param name="b"></param>
 /// <returns></returns>
-int max2(int a, int b)
+inline int max2(int a, int b)
 {
     if (a > b)
         return a;
@@ -104,7 +100,7 @@ int max2(int a, int b)
 /// <param name="b"></param>
 /// <param name="c"></param>
 /// <returns></returns>
-int min3(int a, int b, int c)
+inline int min3(int a, int b, int c)
 {
     if (a == min2(a, b))
         return min2(a, c);
@@ -123,7 +119,7 @@ int min3(int a, int b, int c)
 /// <param name="b"></param>
 /// <param name="c"></param>
 /// <returns></returns>
-int max3(int a, int b, int c)
+inline int max3(int a, int b, int c)
 {
     if (a == max2(a, b))
         return max2(a, c);
@@ -161,210 +157,18 @@ void read_image()
         {
             for (j = 0;j < M;j++)
             {
-                frame_u[i][j] = fgetc(frame_c);
+                frame_u[i][j] = frame_y[i][j];//fgetc(frame_c);
             }
         }
         for (i = 0;i < N;i++)
         {
             for (j = 0;j < M;j++)
             {
-                frame_v[i][j] = fgetc(frame_c);
+                frame_v[i][j] = frame_y[i][j];//fgetc(frame_c);
             }
         }
         fclose(frame_c);
     }
-}
-
-/// <summary>
-/// Writes the YUV contents of the 3 matrices into a new file
-/// </summary>
-void write_yuv_image()
-{
-    int i, j;
-
-    FILE* frame_yuv;
-    frame_yuv = fopen(file_yuv, "wb");
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_y[i][j], frame_yuv);
-        }
-    }
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_u[i][j], frame_yuv);
-        }
-    }
-
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_v[i][j], frame_yuv);
-        }
-    }
-
-    fclose(frame_yuv);
-}
-
-/// <summary>
-/// Writes the RGB contents of the 3 matrices into a new file
-/// </summary>
-void write_rgb_image()
-{
-    int i, j;
-
-    FILE* frame_rgb;
-    frame_rgb = fopen(file_rgb, "wb");
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_r[i][j], frame_rgb);
-        }
-    }
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_g[i][j], frame_rgb);
-        }
-    }
-
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_b[i][j], frame_rgb);
-        }
-    }
-
-    fclose(frame_rgb);
-}
-
-/// <summary>
-/// Writes the YUV contents of the 3 matrices into a new file
-/// </summary>
-void write_grayscale_image()
-{
-    int i, j;
-
-    FILE* frame_grayscale;
-    frame_grayscale = fopen(file_grayscale, "wb");
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_gs_y[i][j], frame_grayscale);
-        }
-    }
-    /*
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_gs_u[i][j], frame_grayscale);
-        }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_gs_v[i][j], frame_grayscale);
-        }
-    }
-    */
-    fclose(frame_grayscale);
-}
-
-/// <summary>
-/// Writes the YUV contents of the 3 matrices into a new file
-/// </summary>
-void write_gaussian_image()
-{
-    int i, j;
-
-    FILE* frame_gaussian;
-    frame_gaussian = fopen(file_gaussian_f, "wb");
-
-    for (i = 0;i < N + 2;i++)
-    {
-        for (j = 0;j < M + 2;j++)
-        {
-            fputc(frame_filtered_y[i][j], frame_gaussian);
-        }
-    }
-    fclose(frame_gaussian);
-}
-
-/// <summary>
-/// Writes the YUV contents of the 3 matrices into a new file
-/// </summary>
-void write_gradient_image()
-{
-    int i, j;
-
-    FILE* frame_gradient_file;
-    frame_gradient_file = fopen(file_gradient, "wb");
-
-    for (i = 0;i < 2 * (N + 2);i++)
-    {
-        for (j = 0;j < 2 * (M + 2);j++)
-        {
-            fputc(frame_gradient[i][j], frame_gradient_file);
-        }
-    }
-    fclose(frame_gradient_file);
-}
-
-/// <summary>
-/// Writes the YUV contents of the 3 matrices into a new file
-/// </summary>
-void write_angle_image()
-{
-    int i, j;
-
-    FILE* frame_angle_file;
-    frame_angle_file = fopen(file_angle, "wb");
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_angle[i][j], frame_angle_file);
-        }
-    }
-    fclose(frame_angle_file);
-}
-
-/// <summary>
-/// Writes the YUV contents of the 3 matrices into a new file
-/// </summary>
-void write_magnitude_image()
-{
-    int i, j;
-
-    FILE* frame_magnitude_file;
-    frame_magnitude_file = fopen(file_magnitude, "wb");
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            fputc(frame_magnitude[i][j], frame_magnitude_file);
-        }
-    }
-    fclose(frame_magnitude_file);
 }
 
 /// <summary>
@@ -381,21 +185,21 @@ void write_colored_image()
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_coloured_y[i][j], frame_coloured_file);
+            fputc(frame_y[i][j], frame_coloured_file);
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_coloured_u[i][j], frame_coloured_file);
+            fputc(frame_u[i][j], frame_coloured_file);
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_coloured_v[i][j], frame_coloured_file);
+            fputc(frame_v[i][j], frame_coloured_file);
         }
     }
     fclose(frame_coloured_file);
@@ -417,21 +221,21 @@ void yuv_to_rgb() {
     {
         for (j = 0;j < M;j++)
         {
-            frame_r[i][j] = (int)round(frame_y[i][j] + 1.140 * frame_v[i][j]);
+            frame_r[i][j] = frame_y[i][j] + 1.140 * frame_v[i][j];
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            frame_g[i][j] = (int)round(frame_y[i][j] - 0.395 * frame_u[i][j] - 0.581 * frame_v[i][j]);
+            frame_g[i][j] = frame_y[i][j] - 0.395 * frame_u[i][j] - 0.581 * frame_v[i][j];
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            frame_b[i][j] = (int)round(frame_y[i][j] + 2.032 * frame_u[i][j]);
+            frame_b[i][j] = frame_y[i][j] + 2.032 * frame_u[i][j];
         }
     }
 }
@@ -567,7 +371,7 @@ void rgb_to_grayscale(int sel) {
         grayscale_luminosity();
         break;
     default:
-        printf("\nSelect 1 or 2\n\n");
+        printf("\nSelect 1 , 2 or 3\n\n");
         break;
     }
 }
@@ -914,43 +718,34 @@ void colour_image_v2()
 
 int main()
 {
-    // Step 1: Load Image as YUV type from memory
+    printf("\nStep 1: Load Image as YUV type from memory\n\n");
     read_image();
 
-    // write_yuv_image(); // test if the YUV image is loaded correctly
-
-    // Step 2: Convert YUV image to RGB
+    printf("\nStep 2: Convert YUV image to RGB\n\n");
     yuv_to_rgb();
 
-    // write_rgb_image(); // test if the RGB image is converted correctly
-
-    // Step 3: Convert RGB to Grayscale
+    printf("\nStep 3: Convert RGB to Grayscale\n\n");
     rgb_to_grayscale(2);
-    // rgb_gs_to_yuv();
-    // write_grayscale_image(); // test if the grayscale image is converted correctly
 
-    // Step 4: Apply the Gaussian filter on the Image
+    printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
     gaussian_filter();
-    // write_gaussian_image();
 
-    // Step 5: Calculate the angle and the magnitude og the image
+    printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image\n\n");
     gradient_calc();
-    // write_gradient_image();
 
     angle_calc();
-    // write_angle_image();
 
     magnitude_calc();
-    // write_magnitude_image();
 
-    // Step 6: Scale the magnitude image
+    printf("\nStep 6: Scale the magnitude image\n\n");
     scale_magnitude_image();
 
-    // Step 7: Colour the image
+    printf("\nStep 7: Colour the image\n\n");
     colour_image_v2();
     rgb_to_yuv();
     write_colored_image();
 
+    printf("\nFinished...\n\n");
     return 0;
 }
 
