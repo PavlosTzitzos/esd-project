@@ -5,6 +5,8 @@ Embedded System Design Project
 
 # Sources
 
+- [LaTeX equations to Image online converter](https://latex2image.joeraut.com/)
+
  - [General Introduction](https://en.wikipedia.org/wiki/Digital_image_processing)
 
  - [What is YUV?](https://www.pcmag.com/encyclopedia/term/yuv)
