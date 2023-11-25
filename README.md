@@ -29,6 +29,8 @@ Embedded System Design Project
 
  - [RGB to grayscale](https://www.baeldung.com/cs/convert-rgb-to-grayscale)
 
+ - [Canny Edge Detector](https://en.wikipedia.org/wiki/Canny_edge_detector)
+
 # Blogs
 
  - [Video Engineering](https://poynton.ca/Poynton-video-eng.html)
