@@ -42,6 +42,27 @@ int main()
     int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
     int kernel_sobel_y[3][3] = { {-1,-2,-1}, {0,0,0},  {1,2,1} };
+    int neighbohood_of_image[3][3] = { {0,0,0}, {0,0,0},  {0,0,0} };
+    double c1 = 1.140;
+    double c2 = 0.395;
+    double c3 = 0.581;
+    double c4 = 2.032;
+    double y;
+    double u;
+    double v;
+    double r;
+    double g;
+    double b;
+    int min_r = 0;
+    int min_g = 0;
+    int min_b = 0;
+    int max_r = 0;
+    int max_g = 0;
+    int max_b = 0;
+    double slope_r = 255.0 / (max_r - min_r);
+    double slope_g = 255.0 / (max_g - min_g);
+    double slope_b = 255.0 / (max_b - min_b);
+    int sum = 0;
     //printf("\nStep 1: Load Image as YUV type from memory\n\n");
     int i, j,k,s;
     FILE* frame_c;
@@ -81,8 +102,7 @@ int main()
     }
 
     //printf("\nStep 2: Convert YUV image to RGB\n\n");
-    double c1 = 1.140, c2 = 0.395, c3 = 0.581, c4 = 2.032;
-    double y, u, v, r, g, b;
+    
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
@@ -113,12 +133,7 @@ int main()
             frame_2_c[i][j + 1] = b;
         }
     }
-    int min_r = 0;
-    int min_g = 0;
-    int min_b = 0;
-    int max_r = 0;
-    int max_g = 0;
-    int max_b = 0;
+    
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
@@ -149,9 +164,7 @@ int main()
             }
         }
     }
-    double slope_r = 255.0 / (max_r - min_r);
-    double slope_g = 255.0 / (max_g - min_g);
-    double slope_b = 255.0 / (max_b - min_b);
+    
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j += 4)
@@ -220,8 +233,8 @@ int main()
     {
         for (j = 1;j < M;j++)
         {
-            int sum = 0;
-            int neighbohood_of_image[3][3] = {
+            sum = 0;
+            neighbohood_of_image[3][3] = {
                 {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
                 {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
                 {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
@@ -241,8 +254,8 @@ int main()
     {
         for (j = 1;j < M;j++)
         {
-            int sum = 0;
-            int neighbohood_of_image[3][3] = {
+            sum = 0;
+            neighbohood_of_image[3][3] = {
                 {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
                 {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
                 {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
