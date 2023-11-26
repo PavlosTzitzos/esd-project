@@ -63,8 +63,12 @@ int main()
     double slope_g = 255.0 / (max_g - min_g);
     double slope_b = 255.0 / (max_b - min_b);
     int sum = 0;
+    double a;
+    int red = 0;
+    int green = 0;
+    int blue = 0;
     //printf("\nStep 1: Load Image as YUV type from memory\n\n");
-    int i, j,k,s;
+    int i, j,k,s,m,l;
     FILE* frame_c;
     if ((frame_c = fopen("cherry_496x372.yuv", "rb")) == NULL)
     {
@@ -234,11 +238,14 @@ int main()
         for (j = 1;j < M;j++)
         {
             sum = 0;
-            neighbohood_of_image[3][3] = {
-                {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
-                {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
-                {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
-            };
+            
+            for(m = 0;m<3;m++)
+            {
+                for(l=0;l<3;l++)
+                {
+                    neighbohood_of_image[m][l] = frame_padded[i+m-1][j+l-1];
+                }
+            }
             for (k = 0;k < 3;k++)
             {
                 for (s = 0; s < 3;s++)
@@ -255,11 +262,13 @@ int main()
         for (j = 1;j < M;j++)
         {
             sum = 0;
-            neighbohood_of_image[3][3] = {
-                {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
-                {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
-                {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
-            };
+            for(m = 0;m<3;m++)
+            {
+                for(l=0;l<3;l++)
+                {
+                    neighbohood_of_image[m][l] = frame_padded[i+m-1][j+l-1];
+                }
+            }
 
             for (k = 0;k < 3;k++)
             {
@@ -275,12 +284,14 @@ int main()
     {
         for (j = 1;j < M;j++)
         {
-            int sum = 0;
-            int neighbohood_of_image[3][3] = {
-                {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
-                {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
-                {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
-            };
+            sum = 0;
+            for(m = 0;m<3;m++)
+            {
+                for(l=0;l<3;l++)
+                {
+                    neighbohood_of_image[m][l] = frame_padded[i+m-1][j+l-1];
+                }
+            }
             for (k = 0;k < 3;k++)
             {
                 for (s = 0; s < 3;s++)
@@ -314,7 +325,7 @@ int main()
                 frame_angle[i][j] = atan(frame_sobel_x[i][j] / 0.01) * 180 / 3.14159265;
             else
             {
-                double a = frame_sobel_x[i][j] / frame_sobel_y[i][j];
+                a = frame_sobel_x[i][j] / frame_sobel_y[i][j];
                 frame_angle[i][j] = atan(a) * 180 / 3.14159265;
              }
         }
@@ -323,8 +334,8 @@ int main()
     {
         for (j = 0;j < M;j++)
         {
-            double a = frame_sobel_x[i][j];
-            double b = frame_sobel_y[i][j];
+            a = frame_sobel_x[i][j];
+            b = frame_sobel_y[i][j];
             frame_magnitude[i][j] = sqrt(a*a + b*b);
         }
     }
@@ -365,7 +376,7 @@ int main()
     }
     
     //printf("\nStep 7: Colour the image\n\n");
-    int red = 0, green = 0, blue = 0;
+    
     for (i = 0; i < N; i++)
     {
         for (j = 0; j < M; j++)
