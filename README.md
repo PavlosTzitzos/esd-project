@@ -41,6 +41,10 @@ Embedded System Design Project
 
  - [Video Engineering](https://poynton.ca/Poynton-video-eng.html)
 
+# Repositories
+
+ - Thanks to [Vincmazet](https://github.com/vincmazet) for the [Basics of Image Processing](https://vincmazet.github.io/bip/) website.
+
 # Books
 
  - [Digital Image Processing 4th Edition by Rafael C. Gonzalez , Richard E. Woods](https://studylib.net/doc/25705174/digital-image-processing-4th-ed.---r.-gonzalez--r.-woods-...)
