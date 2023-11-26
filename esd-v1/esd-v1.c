@@ -31,6 +31,9 @@ int frame_v[N][M];      /* Frame V of original yuv image */
 int frame_r[N][M];      /* Frame R of converted rgb image */
 int frame_g[N][M];      /* Frame G of converted rgb image */
 int frame_b[N][M];      /* Frame B of converted rgb image */
+int frame_r_scaled[N][M];      /* Frame R of converted rgb image normalized */
+int frame_g_scaled[N][M];      /* Frame G of converted rgb image normalized */
+int frame_b_scaled[N][M];      /* Frame B of converted rgb image normalized */
 int frame_gs_rgb[N][M]; /* Frame of converted grayscale rgb image */
 int frame_gs_y[N][M];   /* Frame Y of converted grayscale yuv image */
 int frame_gs_u[N][M];   /* Frame U of converted grayscale yuv image */
@@ -233,7 +236,7 @@ void write_rgb_image()
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_r[i][j], frame_rgb);
+            fputc(frame_r_scaled[i][j], frame_rgb);
         }
     }
 
@@ -241,7 +244,7 @@ void write_rgb_image()
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_g[i][j], frame_rgb);
+            fputc(frame_g_scaled[i][j], frame_rgb);
         }
     }
 
@@ -250,7 +253,7 @@ void write_rgb_image()
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_b[i][j], frame_rgb);
+            fputc(frame_b_scaled[i][j], frame_rgb);
         }
     }
 
@@ -856,7 +859,7 @@ void linear_scaling(int min , int max)
     //tex:
     //$\begin{align*} y = a (x - x_0) + y_0 \end{align*}$
     
-    float slope = 255 / (max - min);
+    double slope = 255.0 / (max - min);
 
     for (i = 0;i < N;i++)
     {
@@ -887,6 +890,155 @@ void scale_magnitude_image()
     // Step 3 : linear scaling
     linear_scaling(min_magnitude,max_magnitude);
 }
+
+/// <summary>
+/// Scans the array to find te maximum , most basic method
+/// </summary>
+/// <returns></returns>
+int find_max_r()
+{
+    int max = 0;
+    for (int i = 0;i < N;i++)
+    {
+        for (int j = 0;j < M;j++)
+        {
+            if (max < frame_r[i][j])
+            {
+                max = frame_r[i][j];
+            }
+        }
+    }
+    return max;
+}
+
+/// <summary>
+/// Scans the array to find the minimum , most basic method
+/// </summary>
+/// <returns></returns>
+int find_min_r()
+{
+    int min = 0;
+    for (int i = 0;i < N;i++)
+    {
+        for (int j = 0;j < M;j++)
+        {
+            if (min > frame_r[i][j])
+            {
+                min = frame_r[i][j];
+            }
+        }
+    }
+    return min;
+}
+
+/// <summary>
+/// Scans the array to find te maximum , most basic method
+/// </summary>
+/// <returns></returns>
+int find_max_g()
+{
+    int max = 0;
+    for (int i = 0;i < N;i++)
+    {
+        for (int j = 0;j < M;j++)
+        {
+            if (max < frame_g[i][j])
+            {
+                max = frame_g[i][j];
+            }
+        }
+    }
+    return max;
+}
+
+/// <summary>
+/// Scans the array to find the minimum , most basic method
+/// </summary>
+/// <returns></returns>
+int find_min_g()
+{
+    int min = 0;
+    for (int i = 0;i < N;i++)
+    {
+        for (int j = 0;j < M;j++)
+        {
+            if (min > frame_g[i][j])
+            {
+                min = frame_g[i][j];
+            }
+        }
+    }
+    return min;
+}
+
+/// <summary>
+/// Scans the array to find te maximum , most basic method
+/// </summary>
+/// <returns></returns>
+int find_max_b()
+{
+    int max = 0;
+    for (int i = 0;i < N;i++)
+    {
+        for (int j = 0;j < M;j++)
+        {
+            if (max < frame_b[i][j])
+            {
+                max = frame_b[i][j];
+            }
+        }
+    }
+    return max;
+}
+
+/// <summary>
+/// Scans the array to find the minimum , most basic method
+/// </summary>
+/// <returns></returns>
+int find_min_b()
+{
+    int min = 0;
+    for (int i = 0;i < N;i++)
+    {
+        for (int j = 0;j < M;j++)
+        {
+            if (min > frame_b[i][j])
+            {
+                min = frame_b[i][j];
+            }
+        }
+    }
+    return min;
+}
+
+/// <summary>
+/// Scales the RGB image to 0 to 255 after converting it from the original YUV
+/// </summary>
+void scale_rgb_image()
+{
+    int i,j;
+
+    int min_r = find_min_r();
+    int min_g = find_min_g();
+    int min_b = find_min_b();
+    int max_r = find_max_r();
+    int max_g = find_max_g();
+    int max_b = find_max_b();
+
+    float slope_r = 255.0 / (max_r - min_r);
+    double slope_g = 255.0 / (max_g - min_g);
+    double slope_b = 255.0 / (max_b - min_b);
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0; j < M;j++)
+        {
+            frame_r_scaled[i][j] = (int)round(slope_r * (frame_r[i][j] - min_r));
+            frame_g_scaled[i][j] = (int)round(slope_g * (frame_g[i][j] - min_g));
+            frame_b_scaled[i][j] = (int)round(slope_b * (frame_b[i][j] - min_b));
+        }
+    }
+}
+
 
 /// <summary>
 /// Function to assign colors based on orientation and intensity
@@ -933,12 +1085,13 @@ int main()
 	
 	// Step 2: Convert YUV image to RGB
 	yuv_to_rgb();
-
+    scale_rgb_image();
     write_rgb_image(); // test if the RGB image is converted correctly
 
 	// Step 3: Convert RGB to Grayscale
-	rgb_to_grayscale(2);
-    rgb_gs_to_yuv();
+	rgb_to_grayscale(3);// use luminosity method sel=3 (prefered)
+    //rgb_gs_to_yuv();
+    //scale_yuv_image();
     write_grayscale_image(); // test if the grayscale image is converted correctly
 
 	// Step 4: Apply the Gaussian filter on the Image
