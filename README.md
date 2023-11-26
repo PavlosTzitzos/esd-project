@@ -11,6 +11,8 @@ Embedded System Design Project
 
  - [LaTeX in Visual Studio as Comments - VS Extension > Tools](https://marketplace.visualstudio.com/items?itemName=vs-publisher-1305558.VsTeXCommentsExtension2022)
 
+ - [Using LaTeX in Visual Studio Code on Windows - Medium](https://guillaumeblanchet.medium.com/using-latex-in-visual-studio-code-on-windows-121032043dad)
+
 # Guides
 
  - [The big list of LaTeX symbols](https://ftp.cc.uoc.gr/mirrors/CTAN/info/symbols/comprehensive/symbols-a4.pdf)
