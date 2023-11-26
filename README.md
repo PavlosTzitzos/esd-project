@@ -40,3 +40,7 @@ Embedded System Design Project
  - [Digital Image Processing 4th Edition by Rafael C. Gonzalez , Richard E. Woods](https://studylib.net/doc/25705174/digital-image-processing-4th-ed.---r.-gonzalez--r.-woods-...)
 
  - [Digital Video and HD Algorithms and Interfaces, Second Edition](https://shop.elsevier.com/books/digital-video-and-hd/poynton/978-0-12-391926-7)
+
+ - [Engineering a Compiler](https://shop.elsevier.com/books/engineering-a-compiler/cooper/978-0-12-815412-0)
+
+
