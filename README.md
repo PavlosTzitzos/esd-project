@@ -4,21 +4,37 @@ Embedded System Design Project
 # Folder Structure
 
 esd-project
+
 |-Report
+
 | |-v1
+
 | | |-LaTeX-images
+
 | | |-Report.pdf
+
 |-esd-v1
+
 | |-esd-v1.cpp
+
 | |-cherry_496x372.yuv
+
 |-esd-v1-optimized
+
 | |-esd-v1-optimized.cpp
+
 | |-cherry_496x372.yuv
+
 |-cw-v1
+
 | |-esd-v1-optimized.c
+
 | |-scatter.txt
+
 | |-memory.map
+
 | |-stack.c
+
 | |-cherry_496x372.yuv
 
 # Tools
