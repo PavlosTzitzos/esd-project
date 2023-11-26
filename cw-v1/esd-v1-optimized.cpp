@@ -1,10 +1,12 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
 #define N 372
 #define M 496
 
+#pragma arm section zidata="ram"
 int frame_1_a[N][M];      /* Frame Y of original yuv image */
 int frame_1_b[N][M];      /* Frame U of original yuv image */
 int frame_1_c[N][M];      /* Frame V of original yuv image */
@@ -27,19 +29,26 @@ int frame_angle[N][M];
 int frame_magnitude[N][M];
 
 int frame_scaled[N][M];
+#pragma arm section
+
+
+int round(double a)
+{
+	return (int)(a+0.5);
+}
 
 int main()
 {
     int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
     int kernel_sobel_y[3][3] = { {-1,-2,-1}, {0,0,0},  {1,2,1} };
-    printf("\nStep 1: Load Image as YUV type from memory\n\n");
+    //printf("\nStep 1: Load Image as YUV type from memory\n\n");
     int i, j,k,s;
     FILE* frame_c;
     if ((frame_c = fopen("cherry_496x372.yuv", "rb")) == NULL)
     {
         printf("current frame doesn't exist\n");
-        exit(-1);
+        return 0;//exit(-1);
     } else {
         for (i = 0;i < N;i++)
         {
@@ -71,7 +80,7 @@ int main()
         fclose(frame_c);
     }
 
-    printf("\nStep 2: Convert YUV image to RGB\n\n");
+    //printf("\nStep 2: Convert YUV image to RGB\n\n");
     double c1 = 1.140, c2 = 0.395, c3 = 0.581, c4 = 2.032;
     double y, u, v, r, g, b;
     for (i = 0;i < N;i++)
@@ -147,33 +156,33 @@ int main()
     {
         for (j = 0;j < M;j += 4)
         {
-            frame_1_a[i][j] = (int)round(slope_r * (frame_2_a[i][j] - min_r));
-            frame_1_a[i][j + 1] = (int)round(slope_r * (frame_2_a[i][j + 1] - min_r));
-            frame_1_a[i][j + 2] = (int)round(slope_r * (frame_2_a[i][j + 2] - min_r));
-            frame_1_a[i][j + 3] = (int)round(slope_r * (frame_2_a[i][j + 3] - min_r));
+            frame_1_a[i][j] = round(slope_r * (frame_2_a[i][j] - min_r));
+            frame_1_a[i][j + 1] = round(slope_r * (frame_2_a[i][j + 1] - min_r));
+            frame_1_a[i][j + 2] = round(slope_r * (frame_2_a[i][j + 2] - min_r));
+            frame_1_a[i][j + 3] = round(slope_r * (frame_2_a[i][j + 3] - min_r));
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j += 4)
         {
-            frame_1_b[i][j] = (int)round(slope_g * (frame_2_b[i][j] - min_g));
-            frame_1_b[i][j + 1] = (int)round(slope_g * (frame_2_b[i][j + 1] - min_g));
-            frame_1_b[i][j + 2] = (int)round(slope_g * (frame_2_b[i][j + 2] - min_g));
-            frame_1_b[i][j + 3] = (int)round(slope_g * (frame_2_b[i][j + 3] - min_g));
+            frame_1_b[i][j] = round(slope_g * (frame_2_b[i][j] - min_g));
+            frame_1_b[i][j + 1] = round(slope_g * (frame_2_b[i][j + 1] - min_g));
+            frame_1_b[i][j + 2] = round(slope_g * (frame_2_b[i][j + 2] - min_g));
+            frame_1_b[i][j + 3] = round(slope_g * (frame_2_b[i][j + 3] - min_g));
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j += 4)
         {
-            frame_1_c[i][j] = (int)round(slope_b * (frame_2_c[i][j] - min_b));
-            frame_1_c[i][j + 1] = (int)round(slope_b * (frame_2_c[i][j + 1] - min_b));
-            frame_1_c[i][j + 2] = (int)round(slope_b * (frame_2_c[i][j + 2] - min_b));
-            frame_1_c[i][j + 3] = (int)round(slope_b * (frame_2_c[i][j + 3] - min_b));
+            frame_1_c[i][j] = round(slope_b * (frame_2_c[i][j] - min_b));
+            frame_1_c[i][j + 1] = round(slope_b * (frame_2_c[i][j + 1] - min_b));
+            frame_1_c[i][j + 2] = round(slope_b * (frame_2_c[i][j + 2] - min_b));
+            frame_1_c[i][j + 3] = round(slope_b * (frame_2_c[i][j + 3] - min_b));
         }
     }
-    printf("\nStep 3: Convert RGB to Grayscale using the luminosity method\n\n");
+    //printf("\nStep 3: Convert RGB to Grayscale using the luminosity method\n\n");
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
@@ -181,7 +190,7 @@ int main()
             frame_gs_rgb[i][j] = 0.3 * frame_1_a[i][j] + 0.59 * frame_1_b[i][j] + 0.11 * frame_1_c[i][j];
         }
     }
-    printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
+    //printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
     for (i = 1;i < N + 1;i++)
     {
         for (j = 1;j < M + 1;j+=4)
@@ -227,7 +236,7 @@ int main()
             frame_filtered_y[i][j] = sum;
         }
     }
-    printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image\n\n");
+    //printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image\n\n");
     for (i = 1;i < N;i++)
     {
         for (j = 1;j < M;j++)
@@ -291,18 +300,23 @@ int main()
             if (frame_sobel_y[i][j] == 0)
                 frame_angle[i][j] = atan(frame_sobel_x[i][j] / 0.01) * 180 / 3.14159265;
             else
-                frame_angle[i][j] = atan(frame_sobel_x[i][j] / frame_sobel_y[i][j]) * 180 / 3.14159265;
+            {
+                double a = frame_sobel_x[i][j] / frame_sobel_y[i][j];
+                frame_angle[i][j] = atan(a) * 180 / 3.14159265;
+             }
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            frame_magnitude[i][j] = sqrt(pow(frame_sobel_x[i][j], 2) + pow(frame_sobel_y[i][j], 2));
+            double a = frame_sobel_x[i][j];
+            double b = frame_sobel_y[i][j];
+            frame_magnitude[i][j] = sqrt(a*a + b*b);
         }
     }
 
-    printf("\nStep 6: Scale the magnitude image\n\n");
+    //printf("\nStep 6: Scale the magnitude image\n\n");
     int min = 0;
     for (i = 0;i < N;i++)
     {
@@ -337,7 +351,7 @@ int main()
         }
     }
     
-    printf("\nStep 7: Colour the image\n\n");
+    //printf("\nStep 7: Colour the image\n\n");
     int red = 0, green = 0, blue = 0;
     for (i = 0; i < N; i++)
     {
@@ -405,6 +419,6 @@ int main()
     }
     fclose(frame_coloured_file);
 
-    printf("\nFinished...\n\n");
+    //printf("\nFinished...\n\n");
     return 0;
 }
