@@ -19,13 +19,17 @@ Embedded System Design Project
 
 # Articles
 
- - [Conversion between YUV and RGB](https://www.pcmag.com/encyclopedia/term/yuvrgb-conversion-formulas)
-
- - [Convert RGB to Grayscale](https://www.baeldung.com/cs/convert-rgb-to-grayscale)
-
  - [General Introduction](https://en.wikipedia.org/wiki/Digital_image_processing)
 
  - [What is YUV?](https://www.pcmag.com/encyclopedia/term/yuv)
+
+ - [RGB to YUV and their range of values](https://dexonsystems.com/blog/rgb-yuv-color-spaces#:~:text=Like%20any%20color%20space%2C%20YUV%20space%20uses%20mathematical,U%20and%20V%20range%20from%20-0.5%20to%200.5.)
+
+ - [Conversion between YUV and RGB](https://www.pcmag.com/encyclopedia/term/yuvrgb-conversion-formulas)
+
+ - [RGB to grayscale](https://www.baeldung.com/cs/convert-rgb-to-grayscale)
+
+ - [Canny Edge Detector](https://en.wikipedia.org/wiki/Canny_edge_detector)
 
 # Blogs
 
