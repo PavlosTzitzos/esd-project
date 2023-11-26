@@ -888,47 +888,10 @@ void scale_magnitude_image()
     linear_scaling(min_magnitude,max_magnitude);
 }
 
-void colour_image_v1()
-{
-    int i, j;
-
-    //tex:
-    //$\begin{align*} R = | \nabla I | \sin{ \theta } \end{align*}$
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            frame_coloured_r[i][j] = frame_magnitude[i][j] * sin(frame_angle[i][j]);
-        }
-    }
-    //tex:
-    //$\begin{align*} G = | \nabla I | \cos{ \theta } \end{align*}$
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            frame_coloured_g[i][j] = frame_magnitude[i][j] * cos(frame_angle[i][j]);
-        }
-    }
-    //tex:
-    //$\begin{align*} B = 0 \end{align*}$
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            frame_coloured_b[i][j] = 0;
-        }
-    }
-}
-
-
 /// <summary>
 /// Function to assign colors based on orientation and intensity
 /// </summary>
-void colour_image_v2()
+void colour_image()
 {
     for (int i = 0; i < N; i++)
     {
@@ -996,7 +959,7 @@ int main()
     scale_magnitude_image();
 	
     // Step 7: Colour the image
-	colour_image_v2();
+	colour_image();
     rgb_to_yuv();
     write_colored_image();
 
