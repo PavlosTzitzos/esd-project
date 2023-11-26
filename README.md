@@ -43,4 +43,4 @@ Embedded System Design Project
 
  - [Engineering a Compiler](https://shop.elsevier.com/books/engineering-a-compiler/cooper/978-0-12-815412-0)
 
-
+ - [Dragon Book](https://suif.stanford.edu/dragonbook/)
