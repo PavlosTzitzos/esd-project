@@ -1,6 +1,50 @@
 # esd-project
 Embedded System Design Project
 
+# Folder Structure
+
+📦esd-project
+
+┣ 📂Report
+
+┃ ┣ 📂v1
+
+┃ ┃ ┣ 📂LaTeX-images
+
+┃ ┃ ┣ 📜Report.pdf
+
+┃ ┃ ┗ 📜Report.docx
+
+┣ 📂esd-v1
+
+┃ ┗ 📜esd-v1.c
+
+┣ 📂esd-v1-optimized
+
+┃ ┗ 📜esd-v1-optimized.c
+
+┣ 📂cw-v1
+
+┃ ┣ 📜scatter.txt
+
+┃ ┣ 📜memory.map
+
+┃ ┣ 📜stack.c
+
+┃ ┗ 📜cw-v1.c
+
+┣ 📂cw-v1-optimized
+
+┃ ┣ 📜scatter.txt
+
+┃ ┣ 📜memory.map
+
+┃ ┣ 📜stack.c
+
+┃ ┗ 📜cw-v1-optimized.c
+
+┗ 📜README.md
+
 # Tools
 
  - [IDE - Metrowerks CodeWarrior for ARM Development Suite](http://www.metrowerks.com/)
