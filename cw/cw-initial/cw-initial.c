@@ -1103,32 +1103,32 @@ int main()
     // Step 1: Load Image as YUV type from memory
     read_image();
 
-    write_yuv_image(); // test if the YUV image is loaded correctly
+    //write_yuv_image(); // test if the YUV image is loaded correctly
 
     // Step 2: Convert YUV image to RGB
     yuv_to_rgb();
     scale_rgb_image();
-    write_rgb_image(); // test if the RGB image is converted correctly
+    //write_rgb_image(); // test if the RGB image is converted correctly
 
     // Step 3: Convert RGB to Grayscale
     rgb_to_grayscale(3);// use luminosity method sel=3 (prefered)
     //rgb_gs_to_yuv();
     //scale_yuv_image();
-    write_grayscale_image(); // test if the grayscale image is converted correctly
+    //write_grayscale_image(); // test if the grayscale image is converted correctly
 
     // Step 4: Apply the Gaussian filter on the Image
     gaussian_filter();
-    write_gaussian_image();
+    //write_gaussian_image();
 
     // Step 5: Calculate the angle and the magnitude og the image
     gradient_calc();
-    write_gradient_image();
+    //write_gradient_image();
 
     angle_calc();
     write_angle_image();
 
     magnitude_calc();
-    write_magnitude_image();
+    //write_magnitude_image();
 
     // Step 6: Scale the magnitude image
     scale_magnitude_image();
