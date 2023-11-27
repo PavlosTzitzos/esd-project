@@ -1,7 +1,6 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <stdlib.h>
 
 #define N 372
 #define M 496

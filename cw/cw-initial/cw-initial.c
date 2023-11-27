@@ -38,6 +38,8 @@ int frame_gs_v[N][M];   /* Frame V of converted grayscale yuv image */
 
 int frame_padded[N+2][M+2]; /* Frame (I) used to apply the filters */
 
+int neighbohood_of_image[3][3] = { {0,0,0}, {0,0,0},  {0,0,0} }; /* The neighbohood of the (i,j) element during the convolution */
+
 int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };  /* Gaussian 3x3 mask */
 //tex:
 //$\begin{align*} G_{kernel} = \begin{bmatrix} 1 & 2 & 1 \\ 2 & 4 & 2 \\ 1 & 2 & 1 \end{bmatrix} \end{align*}$
@@ -540,8 +542,6 @@ void grayscale_luminosity()
 /// </summary>
 /// <param name="sel">Select method</param>
 void rgb_to_grayscale(int sel) {
-	//
-    int i, j;
 
     switch (sel)
     {
@@ -590,7 +590,7 @@ void padder()
 /// This function applies the gaussian filter on an image
 /// </summary>
 void gaussian_filter() {
-    int i, j, k, s;
+    int i, j, k, s, m, l, sum;
 
     //tex:
     //Convolution: $\begin{align*} I_{grayscale,filtered} = ( G_{kernel} \bigstar I_{grayscale} )(x,y) = \sum _{i=0} ^{N-1} \sum _{j=0} ^{M-1} G_{kernel}(x-i,y-j) I_{grayscale}(i,j)  \end{align*}$
@@ -608,17 +608,19 @@ void gaussian_filter() {
         {
             // element of padded image is : frame_padded[i][j]
             // element of the initial image is : grayscale_image_y[i-1][j-1]
-            int sum = 0;
+            sum = 0;
 
             //tex:
             //$\begin{align*} I_{neighborhood} = \sum _{i=-1} ^{1} \left( \sum _{j=-1} ^1 I_{padded}(i,j) \right) = \begin{bmatrix} I_{padded}(i-1,j-1) & I_{padded}(i-1,j) & I_{padded}(i-1,j+1) \\ I_{padded}(i,j-1) & I_{padded}(i,j) & I_{padded}(i,j+1) \\ I_{padded}(i+1,j-1) & I_{padded}(i+1,j) & I_{padded}(i+1,j+1) \end{bmatrix} \end{align*}$
             
             
-            int neighbohood_of_image[3][3] = {
-                {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
-                {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
-                {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
-            };
+            for(m = 0;m<3;m++)
+			{
+			    for(l=0;l<3;l++)
+			    {
+			        neighbohood_of_image[m][l] = frame_padded[i+m-1][j+l-1];
+			    }
+			}
 
             //tex:
             //$\begin{align*} I_{grayscale , filtered} = \sum _{k=0} ^{3} \left( \sum _{s=0} ^3 G_{kernel}(k,s) \cdot I_{neighborhood}(k,s) \right) \end{align*}$
@@ -642,7 +644,7 @@ void gaussian_filter() {
 /// </summary>
 void sobel_filter_x()
 {
-    int i, j, k, s;
+    int i, j, k, s, m, l, sum;
 
     //tex:
     //Convolution: $\begin{align*} I_{x,filtered} = ( S_{x,kernel} \bigstar I_{grayscale,filtered} )(x,y) = \sum _{i=0} ^{N-1} \sum _{j=0} ^{M-1} S_{x,kernel}(x-i,y-j) I_{grayscale,filtered}(i,j)  \end{align*}$
@@ -658,17 +660,19 @@ void sobel_filter_x()
         {
             // element of padded image is : padded_image[i][j]
             // element of the initial image is : grayscale_image_y[i-1][j-1]
-            int sum = 0;
+            sum = 0;
 
             //tex:
             //$\begin{align*} I_{neighborhood} = \sum _{i=-1} ^{1} \left( \sum _{j=-1} ^1 I_{grayscale,filtered}(i,j) \right) \end{align*}$
 
             
-            int neighbohood_of_image[3][3] = {
-                {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
-                {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
-                {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
-            };
+            for(m = 0;m<3;m++)
+			{
+			    for(l=0;l<3;l++)
+			    {
+			        neighbohood_of_image[m][l] = frame_padded[i+m-1][j+l-1];
+			    }
+			}
 
             //tex:
             //$\begin{align*} I_{x , filtered} = \sum _{k=0} ^{3} \left( \sum _{s=0} ^3 S_{x,kernel}(k,s) \cdot I_{neighborhood}(k,s) \right) \end{align*}$
@@ -691,7 +695,7 @@ void sobel_filter_x()
 /// </summary>
 void sobel_filter_y()
 {
-    int i, j, k, s;
+    int i, j, k, s, m, l, sum;
     
     //tex:
     //Convolution: $\begin{align*} I_{y,filtered} = ( S_{y,kernel} \bigstar I_{grayscale,filtered} )(x,y) = \sum _{i=0} ^{N-1} \sum _{j=0} ^{M-1} S_{y,kernel}(x-i,y-j) I_{grayscale,filtered}(i,j)  \end{align*}$
@@ -707,17 +711,19 @@ void sobel_filter_y()
         {
             // element of padded image is : padded_image[i][j]
             // element of the initial image is : grayscale_image_y[i-1][j-1]
-            int sum = 0;
+            sum = 0;
 
             //tex:
             //$\begin{align*} I_{neighborhood} = \sum _{i=-1} ^{1} \left( \sum _{j=-1} ^1 I_{grayscale,filtered}(i,j) \right) \end{align*}$
 
             
-            int neighbohood_of_image[3][3] = {
-                {frame_padded[i - 1][j - 1], frame_padded[i - 1][j], frame_padded[i - 1][j + 1]},
-                {frame_padded[i][j - 1], frame_padded[i][j], frame_padded[i][j + 1]},
-                {frame_padded[i + 1][j - 1], frame_padded[i + 1][j], frame_padded[i + 1][j + 1]}
-            };
+            for(m = 0;m<3;m++)
+			{
+			    for(l=0;l<3;l++)
+			    {
+			        neighbohood_of_image[m][l] = frame_padded[i+m-1][j+l-1];
+			    }
+			}
 
             //tex:
             //$\begin{align*} I_{y , filtered} = \sum _{k=0} ^{3} \left( \sum _{s=0} ^3 S_{y,kernel}(k,s) \cdot I_{neighborhood}(k,s) \right) \end{align*}$
@@ -741,6 +747,7 @@ void sobel_filter_y()
 /// </summary>
 void gradient_calc()
 {
+	int i,j;
     // Step 1 : Apply the sobel filters
     //tex:
     //$\begin{align*} I_x = \frac{\partial I}{\partial x} \end{align*}$
@@ -754,9 +761,9 @@ void gradient_calc()
     //tex:
     //$\begin{align*} \nabla I = \begin{bmatrix} I_x & I_y \end{bmatrix}' \end{align*}$
 
-    for (int i = 0;i < (N + 2)*2;i++)
+    for (i = 0;i < (N + 2)*2;i++)
     {
-        for (int j = 0;j < (M + 2)*2;j++)
+        for (j = 0;j < (M + 2)*2;j++)
         {
             if (i < N + 2 && j < M + 2)
             {
@@ -776,12 +783,13 @@ void gradient_calc()
 /// </summary>
 void angle_calc()
 {
+    int i,j;
     //tex:
     //$\begin{align*} \theta = \arctan{ \left( \frac{I_x}{I_y} \right) } \end{align*}$
     
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             // handling division by 0 
             if(frame_sobel_y[i][j] == 0)
@@ -799,10 +807,10 @@ void magnitude_calc()
 {
     //tex:
     //$\begin{align*} | \nabla I | = \sqrt{{I_x} ^2 + {I_y} ^2} \end{align*}$
-    
-    for (int i = 0;i < N;i++)
+    int i, j;
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             frame_magnitude[i][j] = sqrt(pow(frame_sobel_x[i][j],2) + pow(frame_sobel_y[i][j],2));
         }
@@ -816,10 +824,11 @@ void magnitude_calc()
 /// <returns></returns>
 int find_max()
 {
+    int i, j;
     int max = 0;
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             if (max < frame_magnitude[i][j])
             {
@@ -836,10 +845,11 @@ int find_max()
 /// <returns></returns>
 int find_min()
 {
+    int i,j;
     int min = 0;
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             if (min > frame_magnitude[i][j])
             {
@@ -858,11 +868,12 @@ int find_min()
 void linear_scaling(int min , int max)
 {
     int i, j;
+    double slope;
 
     //tex:
     //$\begin{align*} y = a (x - x_0) + y_0 \end{align*}$
     
-    double slope = 255.0 / (max - min);
+    slope = 255.0 / (max - min);
 
     for (i = 0;i < N;i++)
     {
@@ -900,10 +911,11 @@ void scale_magnitude_image()
 /// <returns></returns>
 int find_max_r()
 {
+	int i,j;
     int max = 0;
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             if (max < frame_r[i][j])
             {
@@ -920,10 +932,11 @@ int find_max_r()
 /// <returns></returns>
 int find_min_r()
 {
+    int i,j;
     int min = 0;
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             if (min > frame_r[i][j])
             {
@@ -940,10 +953,11 @@ int find_min_r()
 /// <returns></returns>
 int find_max_g()
 {
+	int i,j;
     int max = 0;
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             if (max < frame_g[i][j])
             {
@@ -960,10 +974,11 @@ int find_max_g()
 /// <returns></returns>
 int find_min_g()
 {
+	int i,j;
     int min = 0;
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             if (min > frame_g[i][j])
             {
@@ -980,10 +995,11 @@ int find_min_g()
 /// <returns></returns>
 int find_max_b()
 {
+	int i,j;
     int max = 0;
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             if (max < frame_b[i][j])
             {
@@ -1000,10 +1016,11 @@ int find_max_b()
 /// <returns></returns>
 int find_min_b()
 {
+    int i,j;
     int min = 0;
-    for (int i = 0;i < N;i++)
+    for (i = 0;i < N;i++)
     {
-        for (int j = 0;j < M;j++)
+        for (j = 0;j < M;j++)
         {
             if (min > frame_b[i][j])
             {
@@ -1048,11 +1065,13 @@ void scale_rgb_image()
 /// </summary>
 void colour_image()
 {
-    for (int i = 0; i < N; i++)
+	int i,j;
+	int red, green, blue;
+    for (i = 0; i < N; i++)
     {
-        for (int j = 0; j < M; j++)
+        for (j = 0; j < M; j++)
         {
-            int red = 0, green = 0, blue = 0;
+            red = 0, green = 0, blue = 0;
 
             if (frame_angle[i][j] > -45 && frame_angle[i][j] <= 45) {
                 // Horizontal edge (Blue)
