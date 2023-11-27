@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="esd-v1-optimized.cpp">
+    <ClCompile Include="vs-optimized-1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

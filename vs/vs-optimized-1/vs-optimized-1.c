@@ -1,4 +1,7 @@
 
+// for visual studio only :
+#pragma warning(disable : 4996)
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -31,12 +34,12 @@ int frame_magnitude[N][M];
 int frame_scaled[N][M];
 //#pragma arm section
 
-
+/*
 int round(double a)
 {
     return (int)(a + 0.5);
 }
-
+*/
 int main()
 {
     printf("\nStarted...\n\n");
