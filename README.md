@@ -1,6 +1,12 @@
 # esd-project
 Embedded System Design Project
 
+The code was developed in the following series :
+
+Visual Studio (esd-v1 and esd-v1-optimized)
+
+CodeWarrior (cw-v1 and cw-v1-optimized)
+
 # Folder Structure
 
 📦esd-project
