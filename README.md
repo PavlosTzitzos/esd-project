@@ -33,6 +33,16 @@ Embedded System Design Project
 
 ┃ ┗ 📜cw-v1.c
 
+┣ 📂cw-v1-optimized
+
+┃ ┣ 📜scatter.txt
+
+┃ ┣ 📜memory.map
+
+┃ ┣ 📜stack.c
+
+┃ ┗ 📜cw-v1-optimized.c
+
 ┗ 📜README.md
 
 # Tools
