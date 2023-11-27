@@ -5,15 +5,15 @@ The code was developed in the following series :
 
 1. Visual Studio
    
-   1.1. esd-v1
+   1.1. vs-initial (before optimizations)
 
-   1.2. esd-v1-optimized
+   1.2. vs-optimized (after optimizations)
 
 2. CodeWarrior
 
-   2.1. cw-v1
+   2.1. cw-initial (before optimizations - same code with 1.1)
 
-   2.2. cw-v1-optimized
+   2.2. cw-optimized (after optimizations - same code with 1.2)
 
 The report can be found in greek and soon in english.
 
@@ -23,43 +23,33 @@ The report can be found in greek and soon in english.
 
 ┣ 📂Report
 
-┃ ┣ 📂v1
+┃ ┣ 📂LaTeX-images
 
-┃ ┃ ┣ 📂LaTeX-images
+┃ ┣ 📂greek
 
-┃ ┃ ┣ 📂greek
+┃ ┃ ┣ 📜Report.pdf
 
-┃ ┃ ┃ ┣ 📜Report.pdf
+┃ ┃ ┗ 📜Report.docx
 
-┃ ┃ ┃ ┗ 📜Report.docx
+┣ 📂vs
 
-┣ 📂esd-v1
+┃ ┣ 📂vs-initial
 
-┃ ┗ 📜esd-v1.c
+┃ ┗ 📜vs-initial.c
 
-┣ 📂esd-v1-optimized
+┃ ┣ 📂vs-optimized
 
-┃ ┗ 📜esd-v1-optimized.c
+┃ ┃ ┗ 📜vs-optimized.c
 
-┣ 📂cw-v1
+┣ 📂cw
 
-┃ ┣ 📜scatter.txt
+┃ ┣ 📂cw-initial
 
-┃ ┣ 📜memory.map
+┃ ┗ 📜cw-initial.c
 
-┃ ┣ 📜stack.c
+┃ ┣ 📂cw-optimized
 
-┃ ┗ 📜cw-v1.c
-
-┣ 📂cw-v1-optimized
-
-┃ ┣ 📜scatter.txt
-
-┃ ┣ 📜memory.map
-
-┃ ┣ 📜stack.c
-
-┃ ┗ 📜cw-v1-optimized.c
+┃ ┃ ┗ 📜cw-optimized.c
 
 ┗ 📜README.md
 
