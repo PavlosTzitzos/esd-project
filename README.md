@@ -75,6 +75,8 @@ The report can be found in greek and soon in english.
 
  - [Using LaTeX in Visual Studio Code on Windows - Medium](https://guillaumeblanchet.medium.com/using-latex-in-visual-studio-code-on-windows-121032043dad)
 
+ - [YUV Player](https://github.com/Tee0125/yuvplayer)
+
 # Guides
 
  - [The big list of LaTeX symbols](https://ftp.cc.uoc.gr/mirrors/CTAN/info/symbols/comprehensive/symbols-a4.pdf)
