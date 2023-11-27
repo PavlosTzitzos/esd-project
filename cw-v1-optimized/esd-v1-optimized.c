@@ -39,6 +39,7 @@ int round(double a)
 
 int main()
 {
+    //printf("\nStarted...\n\n");
     int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
     int kernel_sobel_y[3][3] = { {-1,-2,-1}, {0,0,0},  {1,2,1} };
