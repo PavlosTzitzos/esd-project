@@ -59,17 +59,21 @@ int main()
     int max_r = 0;
     int max_g = 0;
     int max_b = 0;
-    double slope_r = 255.0 / (max_r - min_r);
-    double slope_g = 255.0 / (max_g - min_g);
-    double slope_b = 255.0 / (max_b - min_b);
+    double slope_r = 0;
+    double slope_g = 0;
+    double slope_b = 0;
     int sum = 0;
     double a;
     int red = 0;
     int green = 0;
     int blue = 0;
+    int min = 0;
+    int max = 0;
+    double slope = 0;
     //printf("\nStep 1: Load Image as YUV type from memory\n\n");
     int i, j,k,s,m,l;
     FILE* frame_c;
+    FILE* frame_coloured_file;
     if ((frame_c = fopen("cherry_496x372.yuv", "rb")) == NULL)
     {
         printf("current frame doesn't exist\n");
@@ -168,7 +172,9 @@ int main()
             }
         }
     }
-    
+    slope_r = 255.0 / (max_r - min_r);
+    slope_g = 255.0 / (max_g - min_g);
+    slope_b = 255.0 / (max_b - min_b);
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j += 4)
@@ -341,7 +347,7 @@ int main()
     }
 
     //printf("\nStep 6: Scale the magnitude image\n\n");
-    int min = 0;
+    min = 0;
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
@@ -352,7 +358,7 @@ int main()
             }
         }
     }
-    int max = 0;
+    max = 0;
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
@@ -363,7 +369,7 @@ int main()
             }
         }
     }
-    double slope = 255.0 / (max-min);
+    slope = 255.0 / (max-min);
     for (i = 0;i < N;i++)
     {
         for (j = 0; j < M;j+=4)
@@ -417,9 +423,9 @@ int main()
             frame_2_c[i][j] = 0.615 * frame_1_a[i][j] - 0.515 * frame_1_b[i][j] - 0.100 * frame_1_c[i][j];
         }
     }
-    FILE* frame_coloured_file;
-    frame_coloured_file = fopen("cherry_colored.yuv", "wb");
+    
 
+    frame_coloured_file = fopen("cherry_colored.yuv", "wb");
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
