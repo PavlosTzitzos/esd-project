@@ -1,6 +1,58 @@
 # esd-project
 Embedded System Design Project
 
+The code was developed in the following series :
+
+1. Visual Studio
+   
+   1.1. vs-initial (before optimizations)
+
+   1.2. vs-optimized (after optimizations)
+
+2. CodeWarrior
+
+   2.1. cw-initial (before optimizations - same code with 1.1)
+
+   2.2. cw-optimized (after optimizations - same code with 1.2)
+
+The report can be found in greek and soon in english.
+
+# Folder Structure
+
+📦esd-project
+
+┣ 📂Report
+
+┃ ┣ 📂LaTeX-images
+
+┃ ┣ 📂greek
+
+┃ ┃ ┣ 📜Report.pdf
+
+┃ ┃ ┗ 📜Report.docx
+
+┣ 📂vs
+
+┃ ┣ 📂vs-initial
+
+┃ ┗ 📜vs-initial.c
+
+┃ ┣ 📂vs-optimized
+
+┃ ┃ ┗ 📜vs-optimized.c
+
+┣ 📂cw
+
+┃ ┣ 📂cw-initial
+
+┃ ┗ 📜cw-initial.c
+
+┃ ┣ 📂cw-optimized
+
+┃ ┃ ┗ 📜cw-optimized.c
+
+┗ 📜README.md
+
 # Tools
 
  - [IDE - Metrowerks CodeWarrior for ARM Development Suite](http://www.metrowerks.com/)
@@ -12,6 +64,8 @@ Embedded System Design Project
  - [LaTeX in Visual Studio as Comments - VS Extension > Tools](https://marketplace.visualstudio.com/items?itemName=vs-publisher-1305558.VsTeXCommentsExtension2022)
 
  - [Using LaTeX in Visual Studio Code on Windows - Medium](https://guillaumeblanchet.medium.com/using-latex-in-visual-studio-code-on-windows-121032043dad)
+
+ - [YUV Player](https://github.com/Tee0125/yuvplayer)
 
 # Guides
 
