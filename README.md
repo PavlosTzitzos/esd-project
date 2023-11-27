@@ -15,6 +15,8 @@ The code was developed in the following series :
 
    2.2. cw-v1-optimized
 
+The report can be found in greek and soon in english.
+
 # Folder Structure
 
 📦esd-project
@@ -25,9 +27,11 @@ The code was developed in the following series :
 
 ┃ ┃ ┣ 📂LaTeX-images
 
-┃ ┃ ┣ 📜Report.pdf
+┃ ┃ ┣ 📂greek
 
-┃ ┃ ┗ 📜Report.docx
+┃ ┃ ┃ ┣ 📜Report.pdf
+
+┃ ┃ ┃ ┗ 📜Report.docx
 
 ┣ 📂esd-v1
 
