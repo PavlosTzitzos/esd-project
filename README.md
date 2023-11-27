@@ -3,39 +3,37 @@ Embedded System Design Project
 
 # Folder Structure
 
-esd-project
+📦esd-project
 
-|-Report
+┣ 📂Report
 
-| |-v1
+┃ ┣ 📂v1
 
-| | |-LaTeX-images
+┃ ┃ ┣ 📂LaTeX-images
 
-| | |-Report.pdf
+┃ ┃ ┣ 📜Report.pdf
 
-|-esd-v1
+┃ ┃ ┗ 📜Report.docx
 
-| |-esd-v1.cpp
+┣ 📂esd-v1
 
-| |-cherry_496x372.yuv
+┃ ┗ 📜esd-v1.c
 
-|-esd-v1-optimized
+┣ 📂esd-v1-optimized
 
-| |-esd-v1-optimized.cpp
+┃ ┗ 📜esd-v1-optimized.c
 
-| |-cherry_496x372.yuv
+┣ 📂cw-v1
 
-|-cw-v1
+┃ ┣ 📜scatter.txt
 
-| |-esd-v1-optimized.c
+┃ ┣ 📜memory.map
 
-| |-scatter.txt
+┃ ┣ 📜stack.c
 
-| |-memory.map
+┃ ┗ 📜cw-v1.c
 
-| |-stack.c
-
-| |-cherry_496x372.yuv
+┗ 📜README.md
 
 # Tools
 
