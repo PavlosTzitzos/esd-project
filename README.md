@@ -115,4 +115,7 @@ The report can be found in greek and soon in english.
 
  - [ARM Developer Suite CodeWarrior IDE Guide](https://developer.arm.com/documentation/dui0065/d?lang=en)
 
+ - [About ARM and Thumb Instructions of ARM7TDMI](https://microchip.my.site.com/s/article/ARM-and-Thumb-Instructions-of-ARM7TDMI)
+
+
 
