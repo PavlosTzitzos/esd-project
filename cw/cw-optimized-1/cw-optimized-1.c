@@ -5,32 +5,6 @@
 #define N 372
 #define M 496
 
-#pragma arm section zidata="ram"
-int frame_1_a[N][M];      /* Frame Y of original yuv image */
-int frame_1_b[N][M];      /* Frame U of original yuv image */
-int frame_1_c[N][M];      /* Frame V of original yuv image */
-int frame_2_a[N][M];      /* Frame R of converted rgb image */
-int frame_2_b[N][M];      /* Frame G of converted rgb image */
-int frame_2_c[N][M];      /* Frame B of converted rgb image */
-
-int frame_gs_rgb[N][M]; /* Frame of converted grayscale rgb image */
-
-int frame_padded[N + 2][M + 2]; /* Frame (I) used to apply the filters */
-
-int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter */
-
-int frame_sobel_x[N + 2][M + 2]; /* Frame of image after appling the sobel filter x */
-int frame_sobel_y[N + 2][M + 2]; /* Frame of image after appling the sobel filter y */
-
-int frame_gradient[2 * (N + 2)][2 * (M + 2)];
-
-int frame_angle[N][M];
-int frame_magnitude[N][M];
-
-int frame_scaled[N][M];
-#pragma arm section
-
-
 int round(double a)
 {
 	return (int)(a+0.5);
@@ -38,6 +12,21 @@ int round(double a)
 
 int main()
 {
+	int frame_1_a[N][M];      /* Frame Y of original yuv image */
+	int frame_1_b[N][M];      /* Frame U of original yuv image */
+	int frame_1_c[N][M];      /* Frame V of original yuv image */
+	int frame_2_a[N][M];      /* Frame R of converted rgb image */
+	int frame_2_b[N][M];      /* Frame G of converted rgb image */
+	int frame_2_c[N][M];      /* Frame B of converted rgb image */
+	int frame_gs_rgb[N][M]; /* Frame of converted grayscale rgb image */
+	int frame_padded[N + 2][M + 2]; /* Frame (I) used to apply the filters */
+	int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter */
+	int frame_sobel_x[N + 2][M + 2]; /* Frame of image after appling the sobel filter x */
+	int frame_sobel_y[N + 2][M + 2]; /* Frame of image after appling the sobel filter y */
+	int frame_gradient[2 * (N + 2)][2 * (M + 2)];
+	int frame_angle[N][M];
+	int frame_magnitude[N][M];
+	int frame_scaled[N][M];
     //printf("\nStarted...\n\n");
     int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
