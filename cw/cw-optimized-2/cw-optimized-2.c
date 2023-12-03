@@ -336,7 +336,7 @@ int main()
     }
 
     //printf("\nStep 6: Scale the magnitude image\n\n");
-    min = 0;
+    min = 10;
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
@@ -376,9 +376,6 @@ int main()
     {
         for (j = 0; j < M; j++)
         {
-            red = 0;
-            green = 0;
-            blue = 0;
 
             if (frame_angle[i][j] > -45 && frame_angle[i][j] <= 45) {
                 // Horizontal edge (Blue)
