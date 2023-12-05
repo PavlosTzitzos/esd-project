@@ -91,6 +91,14 @@ The report can be found in greek and soon in english.
 
  - [What happened to Metrowerks?](https://theqalead.com/general/what-happened-to-metrowerks/)
 
+ - [Memory Options for Embedded Systems](https://www.qt.io/embedded-development-talk/memory-options-for-embedded-systems-how-to-select-the-right-memory-configuration)
+
+# Videos
+
+ - [Memory in ARM Cortex-M](https://www.youtube.com/watch?v=aT5XMOrid7Y)
+
+ - [Stack and Heap in Memory](https://www.youtube.com/watch?v=_8-ht2AKyH4)
+
 # Blogs
 
  - [Video Engineering](https://poynton.ca/Poynton-video-eng.html)
