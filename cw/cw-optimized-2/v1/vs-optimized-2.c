@@ -35,19 +35,19 @@ int main()
     //printf("\nStarted...\n\n");
     int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
-    int neighbohood_of_image[3][3];
-    int min, max;
-    int min_r = 0;
-    int max_r = 300;
-    double slope_r, slope;
+    int neighborhood_of_image[3][3];
+    int min = 0;
+    int max = 300;
+    double slope;
     int sum = 0;
+    int pixel;
     double a,b;
     int red = 0;
     int green = 0;
     int blue = 0;
     //printf("\nStep 1: Load Image as YUV type from memory\n\n");
     int i, j, k, s, m, l;
-    FILE* frame_c; 
+    FILE* frame_c;
     FILE* frame_coloured_file;
     if ((frame_c = fopen("cherry_496x372.yuv", "rb")) == NULL)
     {
@@ -55,52 +55,18 @@ int main()
         return 0;//exit(-1);
     }
     else {
-        for (i = 0;i < N;i++)
+        for (i = 1;i < N+1;i++)
         {
-            for (j = 0;j < M;j++)
+            for (j = 1;j < M+1;j+=4)
             {
-                frame_1_a[i][j] = fgetc(frame_c);
+                //frame_1_a[i][j] = fgetc(frame_c);
+                frame_padded[i][j] = fgetc(frame_c);
+                frame_padded[i][j + 1] = fgetc(frame_c);
+                frame_padded[i][j + 2] = fgetc(frame_c);
+                frame_padded[i][j + 3] = fgetc(frame_c);
             }
         }
         fclose(frame_c);
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            a = frame_1_a[i][j];
-            if (min_r > a)
-            {
-                min_r = a;
-            }
-            if (max_r < a)
-            {
-                max_r = a;
-            }
-        }
-    }
-    slope_r = 255.0 / (max_r - min_r);
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j += 4)
-        {
-            frame_2_a[i][j] = round(slope_r * (frame_1_a[i][j] - min_r));
-            frame_2_a[i][j + 1] = round(slope_r * (frame_1_a[i][j + 1] - min_r));
-            frame_2_a[i][j + 2] = round(slope_r * (frame_1_a[i][j + 2] - min_r));
-            frame_2_a[i][j + 3] = round(slope_r * (frame_1_a[i][j + 3] - min_r));
-        }
-    }
-    //printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
-    for (i = 1;i < N + 1;i++)
-    {
-        for (j = 1;j < M + 1;j += 4)
-        {
-            frame_padded[i][j] = frame_2_a[i - 1][j - 1];
-            frame_padded[i][j + 1] = frame_2_a[i - 1][j];
-            frame_padded[i][j + 2] = frame_2_a[i - 1][j + 1];
-            frame_padded[i][j + 3] = frame_2_a[i - 1][j + 2];
-        }
     }
     for (i = 0;i < N + 2;i += 2)
     {
@@ -116,7 +82,34 @@ int main()
         frame_padded[0][j + 1] = 0;
         frame_padded[N + 1][j + 1] = 0;
     }
+    for (i = 1;i < N+1;i++)
+    {
+        for (j = 1;j < M+1;j++)
+        {
+            pixel = frame_padded[i][j];
+            if (min > pixel)
+            {
+                min = pixel;
+            }
+            if (max < pixel)
+            {
+                max = pixel;
+            }
+        }
+    }
+    slope = 255.0 / (max - min);
 
+    for (i = 1;i < N+1;i++)
+    {
+        for (j = 1;j < M+1;j += 4)
+        {
+            frame_padded[i][j] = round(slope * (frame_padded[i][j] - min));
+            frame_padded[i][j + 1] = round(slope * (frame_padded[i][j + 1] - min));
+            frame_padded[i][j + 2] = round(slope * (frame_padded[i][j + 2] - min));
+            frame_padded[i][j + 3] = round(slope * (frame_padded[i][j + 3] - min));
+        }
+    }
+    //printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
     for (i = 1;i < N;i++)
     {
         for (j = 1;j < M;j++)
@@ -127,14 +120,14 @@ int main()
             {
                 for (l = 0;l < 3;l++)
                 {
-                    neighbohood_of_image[m][l] = frame_padded[i + m - 1][j + l - 1];
+                    neighborhood_of_image[m][l] = frame_padded[i + m - 1][j + l - 1];
                 }
             }
             for (k = 0;k < 3;k++)
             {
                 for (s = 0; s < 3;s++)
                 {
-                    sum += kernel_gaussian[k][s] * neighbohood_of_image[k][s];
+                    sum += kernel_gaussian[k][s] * neighborhood_of_image[k][s];
                 }
             }
             frame_filtered_y[i][j] = sum;
@@ -150,7 +143,7 @@ int main()
             {
                 for (l = 0;l < 3;l++)
                 {
-                    neighbohood_of_image[m][l] = frame_padded[i + m - 1][j + l - 1];
+                    neighborhood_of_image[m][l] = frame_padded[i + m - 1][j + l - 1];
                 }
             }
 
@@ -158,7 +151,7 @@ int main()
             {
                 for (s = 0; s < 3;s++)
                 {
-                    sum += kernel_sobel_x[k][s] * neighbohood_of_image[k][s];
+                    sum += kernel_sobel_x[k][s] * neighborhood_of_image[k][s];
                 }
             }
             frame_sobel_x[i][j] = sum;
@@ -173,15 +166,14 @@ int main()
             {
                 for (l = 0;l < 3;l++)
                 {
-                    neighbohood_of_image[m][l] = frame_padded[i + m - 1][j + l - 1];
+                    neighborhood_of_image[m][l] = frame_padded[i + m - 1][j + l - 1];
                 }
             }
             for (k = 0;k < 3;k++)
             {
                 for (s = 0; s < 3;s++)
                 {
-                    //sum += kernel_sobel_y[k][s] * neighbohood_of_image[k][s];
-                    sum += kernel_sobel_x[s][k] * neighbohood_of_image[k][s];
+                    sum += kernel_sobel_x[s][k] * neighborhood_of_image[k][s];
                 }
             }
             frame_sobel_y[i][j] = sum;
@@ -224,7 +216,6 @@ int main()
             frame_magnitude[i][j] = sqrt(a * a + b * b);
         }
     }
-
     //printf("\nStep 6: Scale the magnitude image\n\n");
     min = 0;
     for (i = 0;i < N;i++)

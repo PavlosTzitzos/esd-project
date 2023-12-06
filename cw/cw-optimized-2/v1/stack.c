@@ -14,8 +14,8 @@ __value_in_regs struct __initial_stackheap __user_initial_stackheap( unsigned R0
 	// config.stack_base  = 0x00460000;
 
 	/* my configuration */
-	config.heap_base   = 0x001000000;
-	config.stack_base  = 0x002000000;
+	config.heap_base   = 0x01000000;
+	config.stack_base  = 0x02000000;
 					   //0x01000000
 
 	/* factory defaults */
