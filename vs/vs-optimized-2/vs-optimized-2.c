@@ -43,29 +43,16 @@ int main()
     printf("\nStarted...\n\n");
     int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
-    int kernel_sobel_y[3][3] = { {-1,-2,-1}, {0,0,0},  {1,2,1} };
     int neighbohood_of_image[3][3];
     double c1 = 1.140;
     double c2 = 0.395;
     double c3 = 0.581;
     double c4 = 2.032;
-    double y;
-    double u;
-    double v;
-    double r;
-    double g;
-    double b;
-    int min_r;
-    int min_g;
-    int min_b;
-    int max_r;
-    int max_g;
-    int max_b;
+    int min_r = 0;
+    int max_r = 300;
     double slope_r;
-    double slope_g;
-    double slope_b;
     int sum = 0;
-    double a;
+    double a,b;
     int red = 0;
     int green = 0;
     int blue = 0;
@@ -85,131 +72,33 @@ int main()
                 frame_1_a[i][j] = fgetc(frame_c);
             }
         }
-        for (i = 0;i < N;i++)
-        {
-            for (j = 0;j < M;j += 4)
-            {
-                frame_1_b[i][j] = fgetc(frame_c);
-                frame_1_b[i][j + 1] = fgetc(frame_c);
-                frame_1_b[i][j + 2] = fgetc(frame_c);
-                frame_1_b[i][j + 3] = fgetc(frame_c);
-            }
-        }
-        for (i = 0;i < N;i++)
-        {
-            for (j = 0;j < M;j += 4)
-            {
-                frame_1_c[i][j] = fgetc(frame_c);
-                frame_1_c[i][j + 1] = fgetc(frame_c);
-                frame_1_c[i][j + 2] = fgetc(frame_c);
-                frame_1_c[i][j + 3] = fgetc(frame_c);
-            }
-        }
         fclose(frame_c);
     }
-
-    //printf("\nStep 2: Convert YUV image to RGB\n\n");
-
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            y = frame_1_a[i][j];
-            u = frame_1_b[i][j];
-            v = frame_1_c[i][j];
-
-            r = y + c1 * v;
-            g = y - c2 * u - c3 * v;
-            b = y + c4 * u;
-
-            frame_2_a[i][j] = r;
-            frame_2_b[i][j] = g;
-            frame_2_c[i][j] = b;
-
-            // Process the next iteration
-            y = frame_1_a[i][j + 1];
-            u = frame_1_b[i][j + 1];
-            v = frame_1_c[i][j + 1];
-
-            r = y + c1 * v;
-            g = y - c2 * u - c3 * v;
-            b = y + c4 * u;
-
-            frame_2_a[i][j + 1] = r;
-            frame_2_b[i][j + 1] = g;
-            frame_2_c[i][j + 1] = b;
-        }
-    }
-
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            if (min_r > frame_2_a[i][j])
+            a = frame_1_a[i][j];
+            if (min_r > a)
             {
-                min_r = frame_2_a[i][j];
+                min_r = a;
             }
-            if (min_g > frame_2_b[i][j])
+            if (max_r < a)
             {
-                min_g = frame_2_b[i][j];
-            }
-            if (min_b > frame_2_c[i][j])
-            {
-                min_b = frame_2_c[i][j];
-            }
-            if (max_r < frame_2_a[i][j])
-            {
-                max_r = frame_2_a[i][j];
-            }
-            if (max_g < frame_2_b[i][j])
-            {
-                max_g = frame_2_b[i][j];
-            }
-            if (max_b < frame_2_c[i][j])
-            {
-                max_b = frame_2_c[i][j];
+                max_r = a;
             }
         }
     }
     slope_r = 255.0 / (max_r - min_r);
-    slope_g = 255.0 / (max_g - min_g);
-    slope_b = 255.0 / (max_b - min_b);
+
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j += 4)
         {
-            frame_1_a[i][j] = round(slope_r * (frame_2_a[i][j] - min_r));
-            frame_1_a[i][j + 1] = round(slope_r * (frame_2_a[i][j + 1] - min_r));
-            frame_1_a[i][j + 2] = round(slope_r * (frame_2_a[i][j + 2] - min_r));
-            frame_1_a[i][j + 3] = round(slope_r * (frame_2_a[i][j + 3] - min_r));
-        }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j += 4)
-        {
-            frame_1_b[i][j] = round(slope_g * (frame_2_b[i][j] - min_g));
-            frame_1_b[i][j + 1] = round(slope_g * (frame_2_b[i][j + 1] - min_g));
-            frame_1_b[i][j + 2] = round(slope_g * (frame_2_b[i][j + 2] - min_g));
-            frame_1_b[i][j + 3] = round(slope_g * (frame_2_b[i][j + 3] - min_g));
-        }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j += 4)
-        {
-            frame_1_c[i][j] = round(slope_b * (frame_2_c[i][j] - min_b));
-            frame_1_c[i][j + 1] = round(slope_b * (frame_2_c[i][j + 1] - min_b));
-            frame_1_c[i][j + 2] = round(slope_b * (frame_2_c[i][j + 2] - min_b));
-            frame_1_c[i][j + 3] = round(slope_b * (frame_2_c[i][j + 3] - min_b));
-        }
-    }
-    //printf("\nStep 3: Convert RGB to Grayscale using the luminosity method\n\n");
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            frame_gs_rgb[i][j] = 0.3 * frame_1_a[i][j] + 0.59 * frame_1_b[i][j] + 0.11 * frame_1_c[i][j];
+            frame_2_a[i][j] = round(slope_r * (frame_1_a[i][j] - min_r));
+            frame_2_a[i][j + 1] = round(slope_r * (frame_1_a[i][j + 1] - min_r));
+            frame_2_a[i][j + 2] = round(slope_r * (frame_1_a[i][j + 2] - min_r));
+            frame_2_a[i][j + 3] = round(slope_r * (frame_1_a[i][j + 3] - min_r));
         }
     }
     //printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
@@ -217,10 +106,10 @@ int main()
     {
         for (j = 1;j < M + 1;j += 4)
         {
-            frame_padded[i][j] = frame_gs_rgb[i - 1][j - 1];
-            frame_padded[i][j + 1] = frame_gs_rgb[i - 1][j];
-            frame_padded[i][j + 2] = frame_gs_rgb[i - 1][j + 1];
-            frame_padded[i][j + 3] = frame_gs_rgb[i - 1][j + 2];
+            frame_padded[i][j] = frame_2_a[i - 1][j - 1];
+            frame_padded[i][j + 1] = frame_2_a[i - 1][j];
+            frame_padded[i][j + 2] = frame_2_a[i - 1][j + 1];
+            frame_padded[i][j + 3] = frame_2_a[i - 1][j + 2];
         }
     }
     for (i = 0;i < N + 2;i += 2)
@@ -301,7 +190,8 @@ int main()
             {
                 for (s = 0; s < 3;s++)
                 {
-                    sum += kernel_sobel_y[k][s] * neighbohood_of_image[k][s];
+                    //sum += kernel_sobel_y[k][s] * neighbohood_of_image[k][s];
+                    sum += kernel_sobel_x[s][k] * neighbohood_of_image[k][s];
                 }
             }
             frame_sobel_y[i][j] = sum;
