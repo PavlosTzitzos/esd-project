@@ -9,28 +9,16 @@
 #define N 372
 #define M 496
 
-int frame_1_a[N][M];      /* Frame Y of original yuv image */
-int frame_1_b[N][M];      /* Frame U of original yuv image */
-int frame_1_c[N][M];      /* Frame V of original yuv image */
-int frame_2_a[N][M];      /* Frame R of converted rgb image */
-int frame_2_b[N][M];      /* Frame G of converted rgb image */
-int frame_2_c[N][M];      /* Frame B of converted rgb image */
+int frame_1_a[N][M];      /* Frame R of final rgb image */
+int frame_1_b[N][M];      /* Frame G of final rgb image */
+int frame_1_c[N][M];      /* Frame B of final rgb image */
 
-int frame_gs_rgb[N][M]; /* Frame of converted grayscale rgb image */
+int frame_padded[N + 2][M + 2]; /* Frame (I) used to load Y, scale it, apply gaussian kernel, store angle */
 
-int frame_padded[N + 2][M + 2]; /* Frame (I) used to apply the filters */
-
-int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter */
+int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter, store magnitude, normalized magnitude */
 
 int frame_sobel_x[N + 2][M + 2]; /* Frame of image after appling the sobel filter x */
 int frame_sobel_y[N + 2][M + 2]; /* Frame of image after appling the sobel filter y */
-
-int frame_gradient[2 * (N + 2)][2 * (M + 2)];
-
-int frame_angle[N][M];
-int frame_magnitude[N][M];
-
-int frame_scaled[N][M];
 
 /*
 int round(double a)
@@ -68,7 +56,7 @@ int main()
             for (j = 1;j < M+1;j+=4)
             {
                 //frame_1_a[i][j] = fgetc(frame_c);
-                frame_padded[i][j] = fgetc(frame_c);
+                frame_padded[i][j]     = fgetc(frame_c);
                 frame_padded[i][j + 1] = fgetc(frame_c);
                 frame_padded[i][j + 2] = fgetc(frame_c);
                 frame_padded[i][j + 3] = fgetc(frame_c);
@@ -111,10 +99,10 @@ int main()
     {
         for (j = 1;j < M+1;j += 4)
         {
-            frame_padded[i][j] = round(slope * (frame_padded[i][j] - min));
-            frame_padded[i][j + 1] = round(slope * (frame_padded[i][j + 1] - min));
-            frame_padded[i][j + 2] = round(slope * (frame_padded[i][j + 2] - min));
-            frame_padded[i][j + 3] = round(slope * (frame_padded[i][j + 3] - min));
+            frame_padded[i][j]     = (int)round(slope * (frame_padded[i][j]     - min));
+            frame_padded[i][j + 1] = (int)round(slope * (frame_padded[i][j + 1] - min));
+            frame_padded[i][j + 2] = (int)round(slope * (frame_padded[i][j + 2] - min));
+            frame_padded[i][j + 3] = (int)round(slope * (frame_padded[i][j + 3] - min));
         }
     }
     //printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
@@ -151,7 +139,7 @@ int main()
             {
                 for (l = 0;l < 3;l++)
                 {
-                    neighborhood_of_image[m][l] = frame_padded[i + m - 1][j + l - 1];
+                    neighborhood_of_image[m][l] = frame_filtered_y[i + m - 1][j + l - 1];
                 }
             }
 
@@ -174,7 +162,7 @@ int main()
             {
                 for (l = 0;l < 3;l++)
                 {
-                    neighborhood_of_image[m][l] = frame_padded[i + m - 1][j + l - 1];
+                    neighborhood_of_image[m][l] = frame_filtered_y[i + m - 1][j + l - 1];
                 }
             }
             for (k = 0;k < 3;k++)
@@ -187,41 +175,29 @@ int main()
             frame_sobel_y[i][j] = sum;
         }
     }
-    for (i = 0;i < (N + 2) * 2;i++)
+    for (i = 1;i < N+1;i++)
     {
-        for (j = 0;j < (M + 2) * 2;j++)
-        {
-            if (i < N + 2 && j < M + 2)
-            {
-                frame_gradient[i][j] = frame_sobel_x[i][j];
-            }
-            else if (i >= N + 2 && j > M + 2)
-            {
-                frame_gradient[i][j] = frame_sobel_y[N - i][M - j];
-            }
-        }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
+        for (j = 1;j < M+1;j++)
         {
             // handling division by 0 
             if (frame_sobel_y[i][j] == 0)
-                frame_angle[i][j] = atan(frame_sobel_x[i][j] / 0.01) * 180 / 3.14159265;
+                //frame_angle[i][j] = (int)(atan(frame_sobel_x[i][j] / 0.01) * 180 / 3.14159265);
+                frame_padded[i][j] = (int)(atan(frame_sobel_x[i][j] / 0.01) * 180 / 3.14159265);
             else
             {
                 a = frame_sobel_x[i][j] / frame_sobel_y[i][j];
-                frame_angle[i][j] = atan(a) * 180 / 3.14159265;
+                //frame_angle[i][j] = (int)(atan(a) * 180 / 3.14159265);
+                frame_padded[i][j] = (int)(atan(a) * 180 / 3.14159265);
             }
         }
     }
-    for (i = 0;i < N;i++)
+    for (i = 1;i < N+1;i++)
     {
-        for (j = 0;j < M;j++)
+        for (j = 1;j < M+1;j++)
         {
             a = frame_sobel_x[i][j];
             b = frame_sobel_y[i][j];
-            frame_magnitude[i][j] = sqrt(a * a + b * b);
+            frame_filtered_y[i][j] = (int)sqrt(a * a + b * b);
         }
     }
     //printf("\nStep 6: Scale the magnitude image\n\n");
@@ -230,32 +206,32 @@ int main()
     {
         for (j = 0;j < M;j++)
         {
-            if (min > frame_magnitude[i][j])
+            if (min > frame_filtered_y[i][j])
             {
-                min = frame_magnitude[i][j];
+                min = frame_filtered_y[i][j];
             }
         }
     }
-    max = 0;
+    max = 500;
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            if (max < frame_magnitude[i][j])
+            if (max < frame_filtered_y[i][j])
             {
-                max = frame_magnitude[i][j];
+                max = frame_filtered_y[i][j];
             }
         }
     }
     slope = 255.0 / (max - min);
-    for (i = 0;i < N;i++)
+    for (i = 0;i < N+2;i++)
     {
-        for (j = 0; j < M;j += 4)
+        for (j = 0; j < M+2;j += 4)
         {
-            frame_scaled[i][j] = (int)round(slope * (frame_magnitude[i][j] - min));
-            frame_scaled[i][j + 1] = (int)round(slope * (frame_magnitude[i][j + 1] - min));
-            frame_scaled[i][j + 2] = (int)round(slope * (frame_magnitude[i][j + 2] - min));
-            frame_scaled[i][j + 3] = (int)round(slope * (frame_magnitude[i][j + 3] - min));
+            frame_filtered_y[i][j]     = (int)round(slope * (frame_filtered_y[i][j]     - min));
+            frame_filtered_y[i][j + 1] = (int)round(slope * (frame_filtered_y[i][j + 1] - min));
+            frame_filtered_y[i][j + 2] = (int)round(slope * (frame_filtered_y[i][j + 2] - min));
+            frame_filtered_y[i][j + 3] = (int)round(slope * (frame_filtered_y[i][j + 3] - min));
         }
     }
 
@@ -265,40 +241,30 @@ int main()
     {
         for (j = 0; j < M; j++)
         {
-            red = 0;
-            green = 0;
-            blue = 0;
-
-            if (frame_angle[i][j] > -45 && frame_angle[i][j] <= 45) {
+            if (abs(frame_padded[i+1][j+1]) >= 67.5 && abs(frame_padded[i+1][j+1]) <= 90) {
                 // Horizontal edge (Blue)
-                blue = frame_scaled[i][j];
+                frame_1_a[i][j] = 0;                    // Red component
+                frame_1_b[i][j] = 0;                    // Green component
+                frame_1_c[i][j] = frame_filtered_y[i+1][j+1];// Blue component
             }
-            else if (frame_angle[i][j] > 45 && frame_angle[i][j] <= 135) {
-                // Vertical edge (Yellow)
-                red = green = frame_scaled[i][j];
+            else if (abs(frame_padded[i+1][j+1]) < 67.5 && abs(frame_padded[i+1][j+1]) > 22.5) {
+                // Diagonal edge (green)
+                frame_1_a[i][j] = 0;                    // Red component
+                frame_1_b[i][j] = frame_filtered_y[i+1][j+1];// Green component
+                frame_1_c[i][j] = 0;                    // Blue component
             }
-            else if (frame_angle[i][j] > 135 || frame_angle[i][j] <= -135) {
-                // Horizontal edge (Blue)
-                blue = frame_scaled[i][j];
+            else if (abs(frame_padded[i+1][j+1]) < 22.5 && abs(frame_padded[i+1][j+1]) > 0) {
+                // Horizontal edge (red)
+                frame_1_a[i][j] = frame_filtered_y[i+1][j+1];// Red component
+                frame_1_b[i][j] = 0;                    // Green component
+                frame_1_c[i][j] = 0;                    // Blue component
             }
-            else {
-                // Inclined edge (Red/Green)
-                red = green = frame_scaled[i][j];
+            else
+            {
+                frame_1_a[i][j] = frame_filtered_y[i+1][j+1];// Red component
+                frame_1_b[i][j] = 0;                    // Green component
+                frame_1_c[i][j] = 0;                    // Blue component
             }
-
-            // Set the resulting color
-            frame_1_a[i][j] = red;       // Red component
-            frame_1_b[i][j + 1] = green; // Green component
-            frame_1_c[i][j + 2] = blue;  // Blue component
-        }
-    }
-    for (i = 0;i < N;i++)
-    {
-        for (j = 0;j < M;j++)
-        {
-            frame_2_a[i][j] = 0.299 * frame_1_a[i][j] + 0.587 * frame_1_b[i][j] + 0.114 * frame_1_c[i][j];
-            frame_2_b[i][j] = -0.147 * frame_1_a[i][j] - 0.289 * frame_1_b[i][j] + 0.436 * frame_1_c[i][j];
-            frame_2_c[i][j] = 0.615 * frame_1_a[i][j] - 0.515 * frame_1_b[i][j] - 0.100 * frame_1_c[i][j];
         }
     }
     frame_coloured_file = fopen("cherry_colored.yuv", "wb");
@@ -307,21 +273,21 @@ int main()
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_2_a[i][j], frame_coloured_file);
+            fputc(frame_1_a[i][j], frame_coloured_file);
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_2_b[i][j], frame_coloured_file);
+            fputc(frame_1_b[i][j], frame_coloured_file);
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_2_b[i][j], frame_coloured_file);
+            fputc(frame_1_c[i][j], frame_coloured_file);
         }
     }
     fclose(frame_coloured_file);
