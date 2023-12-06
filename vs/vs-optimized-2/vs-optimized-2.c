@@ -44,7 +44,7 @@ int main()
     int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
     int kernel_sobel_y[3][3] = { {-1,-2,-1}, {0,0,0},  {1,2,1} };
-    int neighbohood_of_image[3][3] = { {0,0,0}, {0,0,0},  {0,0,0} };
+    int neighbohood_of_image[3][3];
     double c1 = 1.140;
     double c2 = 0.395;
     double c3 = 0.581;
@@ -55,15 +55,15 @@ int main()
     double r;
     double g;
     double b;
-    int min_r = 0;
-    int min_g = 0;
-    int min_b = 0;
-    int max_r = 0;
-    int max_g = 0;
-    int max_b = 0;
-    double slope_r = 255.0 / (max_r - min_r);
-    double slope_g = 255.0 / (max_g - min_g);
-    double slope_b = 255.0 / (max_b - min_b);
+    int min_r;
+    int min_g;
+    int min_b;
+    int max_r;
+    int max_g;
+    int max_b;
+    double slope_r;
+    double slope_g;
+    double slope_b;
     int sum = 0;
     double a;
     int red = 0;
@@ -171,7 +171,9 @@ int main()
             }
         }
     }
-
+    slope_r = 255.0 / (max_r - min_r);
+    slope_g = 255.0 / (max_g - min_g);
+    slope_b = 255.0 / (max_b - min_b);
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j += 4)
