@@ -91,6 +91,14 @@ The report can be found in greek and soon in english.
 
  - [What happened to Metrowerks?](https://theqalead.com/general/what-happened-to-metrowerks/)
 
+ - [Memory Options for Embedded Systems](https://www.qt.io/embedded-development-talk/memory-options-for-embedded-systems-how-to-select-the-right-memory-configuration)
+
+# Videos
+
+ - [Memory in ARM Cortex-M](https://www.youtube.com/watch?v=aT5XMOrid7Y)
+
+ - [Stack and Heap in Memory](https://www.youtube.com/watch?v=_8-ht2AKyH4)
+
 # Blogs
 
  - [Video Engineering](https://poynton.ca/Poynton-video-eng.html)
@@ -117,5 +125,8 @@ The report can be found in greek and soon in english.
 
  - [About ARM and Thumb Instructions of ARM7TDMI](https://microchip.my.site.com/s/article/ARM-and-Thumb-Instructions-of-ARM7TDMI)
 
+ - [About Memories on ARM Cortex M - Chapter 8](https://github.com/arm-university/Fundamentals-of-System-on-Chip-Design-on-Arm-Cortex-M-Microcontrollers/tree/main)
+
+ - [Learn about Thumb-2 ISA (T32 and T16)](https://developer.arm.com/Architectures/T32%20Instruction%20Set%20Architecture)
 
 
