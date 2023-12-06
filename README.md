@@ -127,6 +127,6 @@ The report can be found in greek and soon in english.
 
  - [About Memories on ARM Cortex M - Chapter 8](https://github.com/arm-university/Fundamentals-of-System-on-Chip-Design-on-Arm-Cortex-M-Microcontrollers/tree/main)
 
- - [Learn about Thumb-2 ISA (T32)](https://developer.arm.com/Architectures/T32%20Instruction%20Set%20Architecture)
+ - [Learn about Thumb-2 ISA (T32 and T16)](https://developer.arm.com/Architectures/T32%20Instruction%20Set%20Architecture)
 
 
