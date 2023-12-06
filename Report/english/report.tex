@@ -1,0 +1,66 @@
+\documentclass[12pt,twoside]{report}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {../images/} }
+
+\usepackage{amsmath}
+
+\usepackage[english]{babel}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[RO,LE]{Report Title}
+\fancyfoot{}
+\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[LO,CE]{Chapter \thechapter}
+\fancyfoot[CO,RE]{Author Name}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\usepackage{biblatex}
+\addbibresource{references.bib}
+
+\title{Report Title}
+\author{Tzitzos Pavlos , George Polymeridis}
+\date{\today}
+
+\begin{document}
+
+\input{titlepage}
+
+\tableofcontents
+
+\chapter{Introduction}
+\input{chapters/introduction}
+
+\chapter{Methods}
+\input{chapters/chapter02}
+
+\chapter{Code C++}
+\input{chapters/chapter03}
+
+\chapter{Results 1}
+\input{chapters/chapter04}
+
+\chapter{Sensitivity Analysis}
+\input{chapters/chapter05}
+
+\chapter{Results 2}
+\input{chapters/chapter06}
+
+\chapter{Conclusion}
+\input{chapters/conclusion}
+
+\appendix
+\chapter{Appendix}
+\input{chapters/appendix}
+
+\printbibliography
+
+\end{document}
+
+

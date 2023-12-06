@@ -1,0 +1,52 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{latexcompanion}{book}{}
+      \name{author}{1}{}{%
+        {{hash=f5ef7bbc51500f675532eb1e9004747c}{%
+           family={Goossens},
+           familyi={G\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Massachusetts}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{f5ef7bbc51500f675532eb1e9004747c}
+      \strng{fullhash}{f5ef7bbc51500f675532eb1e9004747c}
+      \strng{bibnamehash}{f5ef7bbc51500f675532eb1e9004747c}
+      \strng{authorbibnamehash}{f5ef7bbc51500f675532eb1e9004747c}
+      \strng{authornamehash}{f5ef7bbc51500f675532eb1e9004747c}
+      \strng{authorfullhash}{f5ef7bbc51500f675532eb1e9004747c}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The \LaTeX{} Companion}
+      \field{year}{1993}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
