@@ -23,9 +23,10 @@ int frame_sobel_x[N + 2][M + 2]; /* Frame of image after appling the sobel filte
 int frame_sobel_y[N + 2][M + 2]; /* Frame of image after appling the sobel filter y */
 
 //#pragma arm section zidata="manual"
-int buffer1[M + 2];         /* Used for filters */
-int buffer2[M + 2];         /* Used for filters */
-int buffer3[M + 2];         /* Used for filters */
+int buffer1[M + 2];         /*  */
+int buffer2[M + 2];         /*  */
+int buffer3[M + 2];         /*  */
+//int i, j, k;
 //#pragma arm section
 
 /*
@@ -37,14 +38,20 @@ int round(double a)
 int main()
 {
     printf("\nStarted...\n\n");
+    //int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
+    //int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
     int min = 0;
     int max = 300;
     double slope;
-    double a,b,c,d; // local temp variables
-    int f;
+    int pixel;
+    double a,b;
+    int red = 0;
+    int green = 0;
+    int blue = 0;
     //printf("\nStep 1: Load Image as YUV type from memory\n\n");
-    int i, j;
+    int i, j, k, s, m, l;
     FILE* frame_c;
+    FILE* frame_coloured_file;
     if ((frame_c = fopen("cherry_496x372.yuv", "rb")) == NULL)
     {
         printf("current frame doesn't exist\n");
@@ -55,6 +62,7 @@ int main()
         {
             for (j = 1;j < M+1;j+=4)
             {
+                //frame_1_a[i][j] = fgetc(frame_c);
                 frame_padded[i][j]     = fgetc(frame_c);
                 frame_padded[i][j + 1] = fgetc(frame_c);
                 frame_padded[i][j + 2] = fgetc(frame_c);
@@ -81,14 +89,14 @@ int main()
     {
         for (j = 1;j < M+1;j++)
         {
-            f = frame_padded[i][j];
-            if (min > f)
+            pixel = frame_padded[i][j];
+            if (min > pixel)
             {
-                min = f;
+                min = pixel;
             }
-            if (max < f)
+            if (max < pixel)
             {
-                max = f;
+                max = pixel;
             }
         }
     }
@@ -104,7 +112,7 @@ int main()
             frame_padded[i][j + 3] = (int)round(slope * (frame_padded[i][j + 3] - min));
         }
     }
-    //printf("\nStep 4: Apply the Gaussian filter on the Image using buffers\n\n");
+    //printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
     for (j = 0;j < M + 2;j++) {
         buffer1[j] = frame_padded[0][j];
         buffer2[j] = frame_padded[1][j];
@@ -125,7 +133,7 @@ int main()
             buffer3[j] = frame_padded[i + 1][j];
         }
     }
-    //printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image using buffers \n\n");
+    //printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image\n\n");
     for (j = 0;j < M + 2;j++) {
         buffer1[j] = frame_filtered_y[0][j];
         buffer2[j] = frame_filtered_y[1][j];
@@ -135,25 +143,15 @@ int main()
     {
         for (j = 1;j < M + 1;j++)
         {
-            b = (double)(buffer1[j + 1] - buffer1[j - 1] +
+            frame_sobel_x[i][j] = buffer1[j + 1] - buffer1[j - 1] +
                                   buffer2[j + 1] + buffer2[j + 1] - buffer2[j - 1] - buffer2[j - 1] +
-                                  buffer3[j + 1] - buffer3[j - 1]);
+                                  buffer3[j + 1] - buffer3[j - 1];
 
-            c = (double)( - 1 * buffer1[j - 1] - buffer1[j + 1] -
+            frame_sobel_y[i][j] = -1 * buffer1[j - 1] - buffer1[j + 1] -
                                     buffer1[j]     - buffer1[j] + 
                                     buffer3[j]     + buffer3[j] +
-                                    buffer3[j - 1] + buffer3[j + 1]);
-            // We can imidiatly calculate the angle: 
-            if (c == 0)
-                d = (atan(b / 0.01) * 180 / 3.14159265);
-            else
-            {
-                a = b / c;
-                d = (atan(a) * 180 / 3.14159265);
-            }
-            frame_sobel_x[i][j] = (int)round(b);
-            frame_sobel_x[i][j] = (int)round(c);
-            frame_padded[i][j] = (int)round(d); // store angle
+                                    buffer3[j - 1] + buffer3[j + 1];
+
         }
         for (j = 0;j < M + 2;j++) {
             buffer1[j] = buffer2[j];
@@ -161,26 +159,54 @@ int main()
             buffer3[j] = frame_filtered_y[i + 1][j];
         }
     }
-    min = 0; max = 500;
+    for (i = 1;i < N+1;i++)
+    {
+        for (j = 1;j < M+1;j++)
+        {
+            // handling division by 0 
+            if (frame_sobel_y[i][j] == 0)
+                //frame_angle[i][j] = (int)(atan(frame_sobel_x[i][j] / 0.01) * 180 / 3.14159265);
+                frame_padded[i][j] = (int)(atan(frame_sobel_x[i][j] / 0.01) * 180 / 3.14159265);
+            else
+            {
+                a = frame_sobel_x[i][j] / frame_sobel_y[i][j];
+                //frame_angle[i][j] = (int)(atan(a) * 180 / 3.14159265);
+                frame_padded[i][j] = (int)(atan(a) * 180 / 3.14159265);
+            }
+        }
+    }
     for (i = 1;i < N+1;i++)
     {
         for (j = 1;j < M+1;j++)
         {
             a = frame_sobel_x[i][j];
             b = frame_sobel_y[i][j];
-            f = (int)sqrt(a * a + b * b); // magnitude
-            if (min > f)
-            {
-                min = f;
-            }
-            if (max < f)
-            {
-                max = f;
-            }
-            frame_filtered_y[i][j] = f;
+            frame_filtered_y[i][j] = (int)sqrt(a * a + b * b);
         }
     }
     //printf("\nStep 6: Scale the magnitude image\n\n");
+    min = 0;
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0;j < M;j++)
+        {
+            if (min > frame_filtered_y[i][j])
+            {
+                min = frame_filtered_y[i][j];
+            }
+        }
+    }
+    max = 500;
+    for (i = 0;i < N;i++)
+    {
+        for (j = 0;j < M;j++)
+        {
+            if (max < frame_filtered_y[i][j])
+            {
+                max = frame_filtered_y[i][j];
+            }
+        }
+    }
     slope = 255.0 / (max - min);
     for (i = 0;i < N+2;i++)
     {
@@ -225,30 +251,30 @@ int main()
             }
         }
     }
-    //frame_coloured_file = fopen("cherry_colored.yuv", "wb");
-    frame_c = fopen("cherry_colored.yuv", "wb");
+    frame_coloured_file = fopen("cherry_colored.yuv", "wb");
+
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_1_a[i][j], frame_c);
+            fputc(frame_1_a[i][j], frame_coloured_file);
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_1_b[i][j], frame_c);
+            fputc(frame_1_b[i][j], frame_coloured_file);
         }
     }
     for (i = 0;i < N;i++)
     {
         for (j = 0;j < M;j++)
         {
-            fputc(frame_1_c[i][j], frame_c);
+            fputc(frame_1_c[i][j], frame_coloured_file);
         }
     }
-    fclose(frame_c);
+    fclose(frame_coloured_file);
 
     printf("\nFinished...\n\n");
     return 0;
