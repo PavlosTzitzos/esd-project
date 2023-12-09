@@ -129,4 +129,5 @@ The report can be found in greek and soon in english.
 
  - [Learn about Thumb-2 ISA (T32 and T16)](https://developer.arm.com/Architectures/T32%20Instruction%20Set%20Architecture)
 
+ - [ARM7TDMI Technical Reference Manual r4p1](https://developer.arm.com/documentation/ddi0210/c)
 
