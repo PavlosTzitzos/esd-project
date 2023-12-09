@@ -117,6 +117,8 @@ The report can be found in greek and soon in english.
 
  - [Dragon Book](https://suif.stanford.edu/dragonbook/)
 
+ - [List of Books about ARM architecture](https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/a-list-of-books-about-arm-architecture)
+
 # Documentation
 
  - [ARM Developer - Learn the architecture -  Optimizing C code with Neon intrinsics](https://developer.arm.com/documentation/102467/0201?lang=en)
@@ -129,4 +131,39 @@ The report can be found in greek and soon in english.
 
  - [Learn about Thumb-2 ISA (T32 and T16)](https://developer.arm.com/Architectures/T32%20Instruction%20Set%20Architecture)
 
+ - [ARM7TDMI Technical Reference Manual r4p1](https://developer.arm.com/documentation/ddi0210/c)
 
+ - [Legacy __user_initial_stackheap() documentation](https://developer.arm.com/documentation/dui0492/i/Cihhdahf)
+
+Since the ARM7TDMI is an implementation of the legacy 32-bit architecture armv4T, according to [ARM Developer Hub](https://learn.arm.com/learning-paths/embedded-systems/intro/background/) the recommended processors for embedded systems can be any of the following:
+
+1. ARM Cortex-A for advanced OS
+
+2. ARM Cortex-R for Real-Time Applications (RTOS)
+
+3. ARM Cortex-M for MCUs
+
+The supported architecture version is armv7, armv8, armv9 (latest at 2022).
+
+CodeWarrior IDE vs ARM DS 2022 IDE :
+
+- C Projects vs C/C++/Java/Python Projects
+
+- ARM Executables vs ARM Bare-Metal Projects (and other)
+
+- ARM Compiler vs ARM Compiler 6 (there is support for 5)
+
+- AXD Debugger vs Debug on semihosting
+
+- scatter.txt and memory.map supported on both
+
+- Debugger Internals vs Trace (DTSL) and Streamline
+
+
+# Tutorials for the ARM DS 2022
+
+ - [Bare-Metal HelloWorld with scatter.txt - using commands - for armv8 on the FVP_Base_AEMvA which is a generic Arm Architecture platform, implementing 4 processors](https://learn.arm.com/learning-paths/embedded-systems/bare-metal/hello/)
+
+ - [Design a dynamic Memory Allocator](https://learn.arm.com/learning-paths/cross-platform/dynamic-memory-allocator/)
+
+ - 
