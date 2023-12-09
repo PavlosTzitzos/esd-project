@@ -117,6 +117,8 @@ The report can be found in greek and soon in english.
 
  - [Dragon Book](https://suif.stanford.edu/dragonbook/)
 
+ - [List of Books about ARM architecture](https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/a-list-of-books-about-arm-architecture)
+
 # Documentation
 
  - [ARM Developer - Learn the architecture -  Optimizing C code with Neon intrinsics](https://developer.arm.com/documentation/102467/0201?lang=en)
