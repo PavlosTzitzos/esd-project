@@ -1,6 +1,6 @@
 
 // for visual studio only :
-#pragma warning(disable : 4996)
+//#pragma warning(disable : 4996)
 
 #include <stdio.h>
 #include <math.h>
@@ -9,6 +9,15 @@
 #define N 372
 #define M 496
 
+
+
+int round(double a)
+{
+    return (int)(a + 0.5);
+}
+
+int main()
+{
 int frame_1_a[N][M];      /* Frame R of final rgb image */
 int frame_1_b[N][M];      /* Frame G of final rgb image */
 int frame_1_c[N][M];      /* Frame B of final rgb image */
@@ -20,15 +29,7 @@ int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter
 int frame_sobel_x[N + 2][M + 2]; /* Frame of image after appling the sobel filter x */
 int frame_sobel_y[N + 2][M + 2]; /* Frame of image after appling the sobel filter y */
 
-/*
-int round(double a)
-{
-    return (int)(a + 0.5);
-}
-*/
-int main()
-{
-    printf("\nStarted...\n\n");
+    //printf("\nStarted...\n\n");
     int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
     int neighborhood_of_image[3][3];
@@ -38,9 +39,6 @@ int main()
     int sum = 0;
     int pixel;
     double a,b;
-    int red = 0;
-    int green = 0;
-    int blue = 0;
     //printf("\nStep 1: Load Image as YUV type from memory\n\n");
     int i, j, k, s, m, l;
     FILE* frame_c;
@@ -99,10 +97,10 @@ int main()
     {
         for (j = 1;j < M+1;j += 4)
         {
-            frame_padded[i][j]     = (int)round(slope * (frame_padded[i][j]     - min));
-            frame_padded[i][j + 1] = (int)round(slope * (frame_padded[i][j + 1] - min));
-            frame_padded[i][j + 2] = (int)round(slope * (frame_padded[i][j + 2] - min));
-            frame_padded[i][j + 3] = (int)round(slope * (frame_padded[i][j + 3] - min));
+            frame_padded[i][j]     = round(slope * (frame_padded[i][j]     - min));
+            frame_padded[i][j + 1] = round(slope * (frame_padded[i][j + 1] - min));
+            frame_padded[i][j + 2] = round(slope * (frame_padded[i][j + 2] - min));
+            frame_padded[i][j + 3] = round(slope * (frame_padded[i][j + 3] - min));
         }
     }
     //printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
@@ -228,10 +226,10 @@ int main()
     {
         for (j = 0; j < M+2;j += 4)
         {
-            frame_filtered_y[i][j]     = (int)round(slope * (frame_filtered_y[i][j]     - min));
-            frame_filtered_y[i][j + 1] = (int)round(slope * (frame_filtered_y[i][j + 1] - min));
-            frame_filtered_y[i][j + 2] = (int)round(slope * (frame_filtered_y[i][j + 2] - min));
-            frame_filtered_y[i][j + 3] = (int)round(slope * (frame_filtered_y[i][j + 3] - min));
+            frame_filtered_y[i][j]     = round(slope * (frame_filtered_y[i][j]     - min));
+            frame_filtered_y[i][j + 1] = round(slope * (frame_filtered_y[i][j + 1] - min));
+            frame_filtered_y[i][j + 2] = round(slope * (frame_filtered_y[i][j + 2] - min));
+            frame_filtered_y[i][j + 3] = round(slope * (frame_filtered_y[i][j + 3] - min));
         }
     }
 
@@ -292,6 +290,6 @@ int main()
     }
     fclose(frame_coloured_file);
 
-    printf("\nFinished...\n\n");
+    //printf("\nFinished...\n\n");
     return 0;
 }
