@@ -133,6 +133,10 @@ The report can be found in greek and soon in english.
 
  - [ARM7TDMI Technical Reference Manual r4p1](https://developer.arm.com/documentation/ddi0210/c)
 
+ - [Online Documentation for the Software - RealView Development Suite AXD and armsd Debuggers Guide](https://developer.arm.com/documentation/dui0066/g?lang=en&fbclid=IwAR0QyIrpo4wR1AmY3_tIwoNcDv9ZC-g9V-WRjagNa9aVThYPiCVfv5KLagk)
+
+- [Download Legacy Tool](https://developer.arm.com/downloads/-/rvds-and-ads)
+
  - [Legacy __user_initial_stackheap() documentation](https://developer.arm.com/documentation/dui0492/i/Cihhdahf)
 
 Since the ARM7TDMI is an implementation of the legacy 32-bit architecture armv4T, according to [ARM Developer Hub](https://learn.arm.com/learning-paths/embedded-systems/intro/background/) the recommended processors for embedded systems can be any of the following:
