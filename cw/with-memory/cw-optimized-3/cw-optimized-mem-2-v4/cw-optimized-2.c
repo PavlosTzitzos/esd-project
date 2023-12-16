@@ -8,7 +8,17 @@
 
 
 /* code for armulator*/
-//#pragma arm section zidata="manual"
+int frame_1_a[N][M];      /* Frame R of final rgb image */
+int frame_1_b[N][M];      /* Frame G of final rgb image */
+int frame_1_c[N][M];      /* Frame B of final rgb image */
+
+int frame_padded[N + 2][M + 2]; /* Frame (I) used to load Y, scale it, apply gaussian kernel, store angle */
+
+int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter, store magnitude, normalized magnitude */
+
+int frame_sobel_x[N + 2][M + 2]; /* Frame of image after appling the sobel filter x */
+int frame_sobel_y[N + 2][M + 2]; /* Frame of image after appling the sobel filter y */
+//#pragma arm section zidata="sram"
 int buffer1[M + 2];         /*  */
 int buffer2[M + 2];         /*  */
 int buffer3[M + 2];         /*  */
@@ -22,16 +32,6 @@ int round(double a)
 
 int main()
 {
-int frame_1_a[N][M];      /* Frame R of final rgb image */
-int frame_1_b[N][M];      /* Frame G of final rgb image */
-int frame_1_c[N][M];      /* Frame B of final rgb image */
-
-int frame_padded[N + 2][M + 2]; /* Frame (I) used to load Y, scale it, apply gaussian kernel, store angle */
-
-int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter, store magnitude, normalized magnitude */
-
-int frame_sobel_x[N + 2][M + 2]; /* Frame of image after appling the sobel filter x */
-int frame_sobel_y[N + 2][M + 2]; /* Frame of image after appling the sobel filter y */
     //printf("\nStarted...\n\n");
     //int kernel_gaussian[3][3] = { {1,2,1},    {2,4,2},  {1,2,1} };
     //int kernel_sobel_x[3][3] = { {-1,0,1},   {-2,0,2}, {-1,0,1} };
