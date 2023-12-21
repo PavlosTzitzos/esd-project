@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-12-21T18:54:54.108Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="uhfdsuoyg3ZtWdfkxwLB" version="22.1.2" type="device" pages="7">
+<mxfile host="Electron" modified="2023-12-21T18:54:58.068Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="zQxarAb6IpjZUmsSw1Lj" version="22.1.2" type="device" pages="7">
   <diagram name="Matrix-Steps-initial" id="pY3IIPXt-A9kmcYfwFdn">
     <mxGraphModel dx="1034" dy="612" grid="1" gridSize="6" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -1206,7 +1206,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="CCMWfZwIfLIvI2KkotuL" name="Memory-with-buffers">
-    <mxGraphModel dx="713" dy="422" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1034" dy="612" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
