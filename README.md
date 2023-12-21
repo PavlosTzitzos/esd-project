@@ -133,6 +133,8 @@ The report can be found in greek and soon in english.
 
  - [ARM7TDMI Technical Reference Manual r4p1](https://developer.arm.com/documentation/ddi0210/c)
 
+ - [Scatter files syntax and examples](https://developer.arm.com/documentation/dui0474/c/using-scatter-files?lang=en)
+   
  - [Online Documentation for the Software - RealView Development Suite AXD and armsd Debuggers Guide](https://developer.arm.com/documentation/dui0066/g?lang=en&fbclid=IwAR0QyIrpo4wR1AmY3_tIwoNcDv9ZC-g9V-WRjagNa9aVThYPiCVfv5KLagk)
 
 - [Download Legacy Tool](https://developer.arm.com/downloads/-/rvds-and-ads)
