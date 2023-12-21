@@ -1,0 +1,25 @@
+LR_1 0x00000000 0x0006E000 ; Load Region / View
+{
+; Execution View :
+ER_RO 0x00000000 0x0006E000 ; Execution Region - Read-Only Data 
+{
+* ( +RO )  ; Section Read Only Data
+}
+STACK_HEAP 0x00058000 0x00008000
+{
+; Stack and Heap custom region
+}
+ER_L1 0x00060000 0x0000200 ; L1 Cache 
+{
+* ( .bss ) ; Section .bss objects (RW objects)
+* ( L1RW ) ; Section L1RW - all variables
+}
+ER_L2 0x00060200 0x00001800 ; L2 Cache
+{
+* ( L2ZI ) ; Section L2ZI - buffers
+}
+ER_DM 0x00062000 0x00500000 ; Data Memory
+{
+* ( DMZI ) ; Section DMZI - Array Frames
+}
+}
