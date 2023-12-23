@@ -56,19 +56,19 @@ double* pb = &b;                    // points at b
 double* pc = &c;                    // points at c
 double* pd = &d;                    // points at d
 FILE* fp = NULL;                    // frame pointer
-int(*pfa)[M] = frame_1_a;          // points at frame_1_a
-int(*pfb)[M] = frame_1_b;          // points at frame_1_b
-int(*pfc)[M] = frame_1_c;          // points at frame_1_c
-int(*pfp)[M + 2] = frame_padded;   // points at frame_padded
-int(*pff)[M + 2] = frame_filtered_y;// points at frame_filtered_y
-int(*psx)[M + 2] = frame_sobel_x;  // points at frame_sobel_x
-int(*psy)[M + 2] = frame_sobel_y;  // points at frame_sobel_y
+int( *pfa)[M] = frame_1_a;          // points at frame_1_a
+int( *pfb)[M] = frame_1_b;          // points at frame_1_b
+int( *pfc)[M] = frame_1_c;          // points at frame_1_c
+int( *pfp)[M + 2] = frame_padded;   // points at frame_padded
+int( *pff)[M + 2] = frame_filtered_y;// points at frame_filtered_y
+int( *psx)[M + 2] = frame_sobel_x;  // points at frame_sobel_x
+int( *psy)[M + 2] = frame_sobel_y;  // points at frame_sobel_y
 #pragma arm section
 
 int main()
 {
     printf("\nStarted...\n\n");
-    while (1)
+    while(1)
     {
         printf("\nSelect YUV image: (default is 1) \n");
         printf("\n0. Exit Program");
@@ -93,7 +93,7 @@ int main()
             printf("\n Type number again : ");
             *p0 = scanf("%d", p2);
         }*/
-
+        
         switch (*p2)
         {
         case 0:
@@ -183,7 +183,7 @@ int main()
         {
             for (i = 1;i < NN + 1;i++)
             {
-                for (j = 1;j < MM + 1;j += 4)
+                for (j = 1;j < MM + 1;j+=4)
                 {
                     *(*(pfp + i) + j) = fgetc(fp);
                     *(*(pfp + i) + j + 1) = fgetc(fp);
@@ -232,18 +232,18 @@ int main()
                 *(*(pfp + i) + j + 3) = (int)(slope * (*(*(pfp + i) + j + 3) - min) + 0.5);
             }
         }
-        printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
+        printf("\nStep 4: Apply the Gaussian filter on the Image using buffers\n\n");
         for (i = 1;i < NN + 1;i++)
         {
             for (j = 1;j < MM + 1;j++)
             {
-                *(*(pff + i) + j) = *(*(pff + i - 1) + j - 1) + *(*(pff + i - 1) + j) + *(*(pff + i - 1) + j) + *(*(pff + i - 1) + j + 1) +
-                    *(*(pff + i) + j - 1) + *(*(pff + i) + j - 1) + *(*(pff + i) + j) + *(*(pff + i) + j) + *(*(pff + i) + j) + *(*(pff + i) + j) +
+                *(*(pff + i) + j) = *(*(pff + i - 1) + j - 1) + *(*(pff + i - 1) + j) + *(*(pff + i - 1) + j) + *(*(pff + i -1) + j + 1) +
+                    *(*(pff + i) + j - 1) + *(*(pff + i) + j - 1) + *(*(pff + i) + j) + *(*(pff + i) + j) + *(*(pff + i) + j) + *(*(pff + i) + j) + 
                     *(*(pff + i) + j + 1) + *(*(pff + i) + j + 1) +
                     *(*(pff + i + 1) + j - 1) + *(*(pff + i + 1) + j) + *(*(pff + i + 1) + j) + *(*(pff + i + 1) + j + 1);
             }
         }
-        printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image \n\n");
+        printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image using buffers \n\n");
         for (i = 1;i < NN + 1;i++)
         {
             for (j = 1;j < MM + 1;j++)
@@ -338,7 +338,7 @@ int main()
         fp = fopen("colored.yuv", "wb");
         for (i = 0;i < NN;i++)
         {
-            for (j = 0;j < MM;j += 4)
+            for (j = 0;j < MM;j+=4)
             {
                 // Loop Unrolling:
                 fputc(*(*(pfa + i) + j), fp);
@@ -349,7 +349,7 @@ int main()
         }
         for (i = 0;i < NN;i++)
         {
-            for (j = 0;j < MM;j += 4)
+            for (j = 0;j < MM;j+=4)
             {
                 // Loop Unrolling :
                 fputc(*(*(pfb + i) + j), fp);
@@ -360,7 +360,7 @@ int main()
         }
         for (i = 0;i < NN;i++)
         {
-            for (j = 0;j < MM;j += 4)
+            for (j = 0;j < MM;j+=4)
             {
                 // Loop Unrolling :
                 fputc(*(*(pfc + i) + j), fp);
