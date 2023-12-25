@@ -134,10 +134,12 @@ The report can be found in greek and soon in english.
  - [ARM7TDMI Technical Reference Manual r4p1](https://developer.arm.com/documentation/ddi0210/c)
 
  - [Scatter files syntax and examples](https://developer.arm.com/documentation/dui0474/c/using-scatter-files?lang=en)
-   
+
+ - [About .map memory files](https://developer.arm.com/documentation/dui0058/d/armulator-reference/map-files/format-of-a-map-file?lang=en)
+
  - [Online Documentation for the Software - RealView Development Suite AXD and armsd Debuggers Guide](https://developer.arm.com/documentation/dui0066/g?lang=en&fbclid=IwAR0QyIrpo4wR1AmY3_tIwoNcDv9ZC-g9V-WRjagNa9aVThYPiCVfv5KLagk)
 
-- [Download Legacy Tool](https://developer.arm.com/downloads/-/rvds-and-ads)
+ - [Download Legacy Tool ARM Development Suite v1.2](https://developer.arm.com/downloads/-/rvds-and-ads)
 
  - [Legacy __user_initial_stackheap() documentation](https://developer.arm.com/documentation/dui0492/i/Cihhdahf)
 
