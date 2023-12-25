@@ -1,0 +1,21 @@
+LR_1 0x00000000 0x0005D90 ; Load Region / View (24 KB)
+{
+; Execution View :
+ER_RO 0x00000000 0x0005D90 ; Execution Region - Read-Only Data 
+{
+* ( +RO )  ; Section Read Only Data
+}
+ER_L1 0x00005D90 0x00001AC ; L1 Cache (0.5 KB)
+{
+* ( .bss ) ; Section .bss objects (RW objects)
+* ( L1RW ) ; Section L1RW - all variables
+}
+STACK_HEAP 0x05F3C 0x00008000 ; L2 Cache (32 KB)
+{
+; Stack and Heap custom region
+}
+ER_DM 0x0DF3C 0x004F9360 ; Data Memory (5 MB)
+{
+* ( DMZI ) ; Section DMZI - Array Frames
+}
+}

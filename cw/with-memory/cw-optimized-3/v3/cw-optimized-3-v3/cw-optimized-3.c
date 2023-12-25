@@ -9,8 +9,20 @@
 #define M 498
 #define N 372
 
-// L2 Cache :
-#pragma arm section zidata="L2ZI"
+
+// The slowest memory - Data Memory :
+#pragma arm section zidata="DMZI"
+int frame_padded[N + 2][M + 2];     /* Frame (I) used to load Y, scale it, apply gaussian kernel, store angle */
+int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter, store magnitude, normalized magnitude */
+int frame_1_a[N][M];                /* Frame R of final rgb image */
+int frame_1_b[N][M];                /* Frame G of final rgb image */
+int frame_1_c[N][M];                /* Frame B of final rgb image */
+int frame_sobel_x[N + 2][M + 2];    /* Frame of image after appling the sobel filter x */
+int frame_sobel_y[N + 2][M + 2];    /* Frame of image after appling the sobel filter y */
+#pragma arm section
+
+// L1 Cache (Pointers and some variables):
+#pragma arm section rwdata="L1RW"
 int MM = 496; // local M
 int NN = 372; // local N
 int IsBinaryImage = 0;
@@ -22,24 +34,6 @@ double a, b, c, d = 0; // local temp variables
 int f, g = 0;
 int i, j = 0;
 int ret_inp = 2;
-#pragma arm section
-
-// The slowest memory - Data Memory :
-#pragma arm section zidata="DMZI"
-int frame_1_a[N][M];                /* Frame R of final rgb image */
-int frame_1_b[N][M];                /* Frame G of final rgb image */
-int frame_1_c[N][M];                /* Frame B of final rgb image */
-
-int frame_padded[N + 2][M + 2];     /* Frame (I) used to load Y, scale it, apply gaussian kernel, store angle */
-
-int frame_filtered_y[N + 2][M + 2]; /* Frame Y after appling the gaussian filter, store magnitude, normalized magnitude */
-
-int frame_sobel_x[N + 2][M + 2];    /* Frame of image after appling the sobel filter x */
-int frame_sobel_y[N + 2][M + 2];    /* Frame of image after appling the sobel filter y */
-#pragma arm section
-
-// L1 Cache (Pointers):
-#pragma arm section rwdata="L1RW"
 int* p0 = &ret_inp;                 // points at ret_inp
 int* pM = &MM;                      // points at MM
 int* pN = &NN;                      // points at NN
@@ -232,7 +226,7 @@ int main()
                 *(*(pfp + i) + j + 3) = (int)(slope * (*(*(pfp + i) + j + 3) - min) + 0.5);
             }
         }
-        printf("\nStep 4: Apply the Gaussian filter on the Image using buffers\n\n");
+        printf("\nStep 4: Apply the Gaussian filter on the Image\n\n");
         for (i = 1;i < NN + 1;i++)
         {
             for (j = 1;j < MM + 1;j++)
@@ -243,7 +237,7 @@ int main()
                     *(*(pff + i + 1) + j - 1) + *(*(pff + i + 1) + j) + *(*(pff + i + 1) + j) + *(*(pff + i + 1) + j + 1);
             }
         }
-        printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image using buffers \n\n");
+        printf("\nStep 5: Calculate the grad , the angle and the magnitude of the image\n\n");
         for (i = 1;i < NN + 1;i++)
         {
             for (j = 1;j < MM + 1;j++)
