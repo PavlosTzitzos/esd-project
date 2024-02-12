@@ -1,6 +1,18 @@
 # esd-project
 Embedded System Design Project
 
+## To Do List
+
+- [ ] fix the code where necessary
+- [ ] check the final image result (fix if necessary)
+- [ ] add some tests
+- [ ] make the VS to debug to arm compiler
+- [ ] add a guide for the above
+- [ ] add more memory maps in the optimized-2
+- [ ] add the english version of the report
+
+## Code Development
+
 The code was developed in the following series :
 
 1. Visual Studio
@@ -17,7 +29,7 @@ The code was developed in the following series :
 
 The report can be found in greek and soon in english.
 
-# Folder Structure
+## Folder Structure
 
 📦esd-project
 
